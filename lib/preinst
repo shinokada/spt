@@ -1,0 +1,15 @@
+#!/bin/bash
+# file name preinst
+# Pre-install script for tera. This removes old versions o tera.
+
+echo "Looking for old versions of ${REPO_NAME} ..."
+
+if [ -f "/usr/bin/${REPO_NAME}" ]; then
+    sudo rm -f /usr/bin/${REPO_NAME}
+    echo "Removed old ${REPO_NAME} from /usr/bin ..."
+fi
+
+if [ -d "/usr/share/${REPO_NAME}" ]; then
+    sudo rm -rf /usr/share/${REPO_NAME}
+    echo "Removed old ${REPO_NAME} from /usr/share ..."
+fi
