@@ -8,7 +8,7 @@ This generates a basic DEBIAN package from Github-name/repo-name.
 
 - Linux/Debian
 
-- dpkg-deb
+- dpkg
 
 Debian/Ubuntu should have it. If not install it using apt.
 
@@ -16,13 +16,30 @@ Debian/Ubuntu should have it. If not install it using apt.
 $ sudo apt install dpkg
 ```
 
+- GitHub CLI `gh`
+
 ## Usage
 
-```sh
-$ debtemp shinokada/teffects
-```
+1. Create a pre-deb package
 
-## Features
+   ```sh
+   $ debtemp create shinokada/teffects
+   ```
+
+2. Update the pre-deb package
+
+   ```sh
+   $ code /home/shinichi/.cache/debtemp/pkg/yourRepo_1.0.1-1_all/
+   ```
+
+a. Update Depends in `DEBIAN/control`.
+b. Update script_dir in `usr/bin/your-script`.
+
+   ```bash
+   script_dir="/usr/share/teffects"
+   ```
+
+3. Run `debtemp generate` to create a debian package.
 
 ## Author
 
