@@ -4,6 +4,8 @@
 
 This generates a basic DEBIAN package from Github-name/repo-name.
 
+[Read more details here.](https://betterprogramming.pub/how-to-create-a-basic-debian-package-927be001ad80)
+
 ## Requirement
 
 - Linux/Debian
@@ -29,7 +31,7 @@ $ sudo apt install dpkg
 2. Update the pre-deb package
 
    ```sh
-   $ code /home/shinichi/.cache/debtemp/pkg/yourRepo_1.0.1-1_all/
+   $ code /home/shinichi/.cache/debtemp/pkg/yourRepo_1.0.1-1_all
    ```
 
    a. Update Depends in `DEBIAN/control`.
@@ -41,6 +43,12 @@ $ sudo apt install dpkg
    ```
 
 3. Run `debtemp generate` to create a debian package.
+4. Upload it to GitHub.
+5. You can install it locally:
+
+    ```sh
+    $ sudo apt install /home/yourname/.cache/debtemp/deb/debian-package-name
+    ```
 
 ## Author
 
