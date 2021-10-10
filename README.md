@@ -32,8 +32,9 @@ $ sudo apt install dpkg
    $ code /home/shinichi/.cache/debtemp/pkg/yourRepo_1.0.1-1_all/
    ```
 
-a. Update Depends in `DEBIAN/control`.
-b. Update script_dir in `usr/bin/your-script`.
+   a. Update Depends in `DEBIAN/control`.
+
+   b. Update script_dir in `usr/bin/your-script`.
 
    ```bash
    script_dir="/usr/share/teffects"
