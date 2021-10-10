@@ -20,6 +20,16 @@ $ sudo apt install dpkg
 
 - GitHub CLI `gh`
 
+## Installation
+
+Download the latest debian package from the [releases](https://github.com/shinokada/debtemp/releases) page.
+
+Run:
+
+```sh
+sudo apt install debtemp_XXXXX-X_XXX.deb
+```
+
 ## Usage
 
 1. Create a pre-deb package
