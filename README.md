@@ -1,4 +1,4 @@
-# Debtemp
+# Simple Pacakge Tool (SPT)
 
 ## Overview
 
@@ -22,12 +22,12 @@ $ sudo apt install dpkg
 
 ## Installation
 
-Download the latest debian package from the [releases](https://github.com/shinokada/debtemp/releases) page.
+Download the latest debian package from the [releases](https://github.com/shinokada/spt/releases) page.
 
 Run:
 
 ```sh
-sudo apt install debtemp_XXXXX-X_XXX.deb
+sudo apt install spt_XXXXX-X_XXX.deb
 ```
 
 ## Usage
@@ -35,7 +35,7 @@ sudo apt install debtemp_XXXXX-X_XXX.deb
 1. Create a pre-deb package
 
    ```sh
-   $ debtemp create shinokada/teffects
+   $ spt create shinokada/teffects
    ```
 
 2. Update the pre-deb package
@@ -52,12 +52,12 @@ sudo apt install debtemp_XXXXX-X_XXX.deb
    script_dir="/usr/share/teffects"
    ```
 
-3. Run `debtemp generate` to create a debian package.
+3. Run `spt generate` to create a debian package.
 4. Upload it to GitHub.
 5. You can install it locally:
 
     ```sh
-    $ sudo apt install /home/yourname/.cache/debtemp/deb/debian-package-name
+    $ sudo apt install /home/yourname/.cache/spt/deb/debian-package-name
     ```
 
 ## Author
