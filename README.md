@@ -9,7 +9,7 @@ This generates a basic DEBIAN package from Github-name/repo-name.
 ## Requirement
 
 - Linux/Debian
-
+- curl
 - dpkg
 
 Debian/Ubuntu should have it. If not install it using apt.
@@ -37,6 +37,8 @@ sudo apt install spt_XXXXX-X_XXX.deb
    ```sh
    $ spt create shinokada/teffects
    ```
+
+Use the `-c` or `--code` option to open the created pre-package in VSCode. When you save it, it will ask you the permission since the files' owner is the root.
 
 2. Update the pre-deb package
 

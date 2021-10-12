@@ -156,7 +156,12 @@ EOF
     sudo chmod 755 "$PKG_DIR/$DEB_NAME/usr/bin/$REPO_NAME"
     sudo chmod 755 "$PKG_DIR/$DEB_NAME/DEBIAN/preinst"
 
-    echo "The package is created. Open it to add additional information."
-    echo "Run: code $PKG_DIR/$DEB_NAME"
-    echo "Then run '${SCRIPT_NAME} generate' to generate a debian package."
+    echo "The package is created in $PKG_DIR/$DEB_NAME."
+    if [ "$CODE" = 1 ];then
+        echo "Opening it with VSCode ..."
+        code "$PKG_DIR/$DEB_NAME"
+    else
+        echo "Open it to add additional information."
+    fi
+    echo "After that, run '${SCRIPT_NAME} generate' to generate a debian package."
 }

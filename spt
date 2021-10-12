@@ -3,7 +3,7 @@
 set -eu
 
 # shellcheck disable=SC2034
-VERSION="0.0.6"
+VERSION="0.0.7"
 SCRIPT_NAME=$(basename "$0")
 REPO_VERSION=""
 REPO_USER=""
@@ -92,6 +92,7 @@ parser_definition_create(){
     msg -- 'All parameters accepts --param value and --param=value form.' ''
 
     # msg label:"OPTIONS" -- "DESCRIPTION"
+    flag CODE -c --code -- "Open the created pre-debian package with VSCode."
     disp :usage -h --help
 }
 
