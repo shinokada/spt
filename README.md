@@ -56,7 +56,13 @@ Use the `-c` or `--code` option to open the created pre-package in VSCode. When 
 
 3. Run `spt generate` to create a debian package.
 4. Upload it to GitHub.
-5. You can install it locally:
+5. You can install it locally using the `spt install` command.
+
+    ```sh
+    $ spt install
+    ```
+
+    Or install it manually:
 
     ```sh
     $ sudo apt install /home/yourname/.cache/spt/deb/debian-package-name

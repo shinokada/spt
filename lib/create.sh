@@ -159,7 +159,10 @@ EOF
     echo "The package is created in $PKG_DIR/$DEB_NAME."
     if [ "$CODE" = 1 ];then
         echo "Opening it with VSCode ..."
-        code "$PKG_DIR/$DEB_NAME"
+        code "$PKG_DIR/$DEB_NAME" || {
+            echo "Not able to open in VSCode."
+            exit 1
+        }
     else
         echo "Open it to add additional information."
     fi
