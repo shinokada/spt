@@ -34,39 +34,53 @@ sudo apt install spt_XXXXX-X_XXX.deb
 
 1. Create a pre-deb package
 
-   ```sh
-   $ spt create shinokada/teffects
-   ```
+```sh
+$ spt create github-name/repo-name
+```
 
 Use the `-c` or `--code` option to open the created pre-package in VSCode. When you save it, it will ask you the permission since the files' owner is the root.
 
 2. Update the pre-deb package
 
-   ```sh
-   $ code /home/shinichi/.cache/debtemp/pkg/yourRepo_1.0.1-1_all
-   ```
+```sh
+$ code /home/shinichi/.cache/debtemp/pkg/your-app_1.0.1-1_all
+```
 
-   a. Update Depends in `DEBIAN/control`.
+a. Update Depends in `DEBIAN/control`.
 
-   b. Update script_dir in `usr/bin/your-script`.
+b. Update script_dir in `usr/bin/your-app`.
 
-   ```bash
-   script_dir="/usr/share/teffects"
-   ```
+```bash
+script_dir="/usr/share/your-app"
+```
 
 3. Run `spt generate` to create a debian package.
+
+
+```sh
+$ spt generate
+Creating the deb dirs ...
+Checking dpkg-deb ...
+Generating deb package ...
+/home/ubuntu/.cache/spt/pkg/your-app_1.0.1-1_all
+dpkg-deb: building package 'your-package' in '/home/ubuntu/.cache/spt/deb/your-app_1.0.1-1_all.deb'.
+Your Debian package is in the /home/ubuntu/.cache/spt/deb directory.
+Next upload /home/ubuntu/.cache/spt/deb/your-app_1.0.1-1_all.deb to your GitHub account.
+Then run: sudo apt install /home/ubuntu/.cache/spt/deb/your-app_1.0.1-1_all
+```
+
 4. Upload it to GitHub.
 5. You can install it locally using the `spt install` command.
 
-    ```sh
-    $ spt install
-    ```
+```sh
+$ spt install
+```
 
-    Or install it manually:
+Or install it manually:
 
-    ```sh
-    $ sudo apt install /home/yourname/.cache/spt/deb/debian-package-name
-    ```
+```sh
+$ sudo apt install /home/yourname/.cache/spt/deb/debian-package-name
+```
 
 ## Author
 

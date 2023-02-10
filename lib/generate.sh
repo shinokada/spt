@@ -33,5 +33,5 @@ fn_generate(){
     echo "Your Debian package is in the $DEB_DIR directory."
     DEB_NAME=$(ls "$DEB_DIR")
     echo "Next upload $DEB_DIR/$DEB_NAME to your GitHub account."
-    echo "Then run: sudo apt install $DEB_DIR/$DEB_NAME"
+    echo "To install your app, run: sudo apt install $DEB_DIR/$DEB_NAME"
 }
