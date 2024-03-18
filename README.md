@@ -43,10 +43,16 @@ Use the `-c` or `--code` option to open the created pre-package in VSCode. When 
 2. Update the pre-deb package
 
    ```sh
-   $ code /home/shinichi/.cache/debtemp/pkg/yourRepo_1.0.1-1_all
+   $ code $HOME/.cache/spt/pkg/yourRepo_1.0.1-1_all
    ```
 
    a. Update Depends in `DEBIAN/control`.
+
+   If you are using vim:
+
+   ```sh
+   $ vim $HOME/.cache/spt/pkg/yourRepo_1.0.1-1_all/DEBIAN/control
+   ```
 
    b. Update script_dir in `usr/bin/your-script`.
 
