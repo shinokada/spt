@@ -339,7 +339,7 @@ test_dependencies() {
 
     # Check for gh
     if command -v gh >/dev/null 2>&1; then
-        pass "Required: gh (GitHub CLI) is installed"
+        pass "gh (GitHub CLI) is installed"
 
         # Check if authenticated
         if gh auth status >/dev/null 2>&1; then
@@ -348,7 +348,8 @@ test_dependencies() {
             skip "GitHub authentication" "not logged in (run: gh auth login)"
         fi
     else
-        fail "Required: gh (GitHub CLI) is missing"
+        skip "gh (GitHub CLI)" "not installed (required for 'spt create' and integration tests)"
+        echo "  Install: https://github.com/cli/cli#installation"
     fi
 }
 

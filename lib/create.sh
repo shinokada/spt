@@ -98,7 +98,7 @@ fn_create() {
         fi
 
         REPO_VERSION=$(echo "$API_RESPONSE" | jq -r '.tag_name | ltrimstr("v")')
-        REPO_DESC=$(curl -s "https://api.github.com/repos/${REPO_USER}/${REPO_NAME}" | jq -r '.description // "No description"')
+        REPO_DESC=$(curl -s --connect-timeout 10 --max-time 30 "https://api.github.com/repos/${REPO_USER}/${REPO_NAME}" | jq -r '.description // "No description"')
     else
         # Fallback to grep-based parsing
         HTML=$(curl -sH "Accept: application/vnd.github.v3+json" \
@@ -115,7 +115,7 @@ fn_create() {
         REPO_VERSION="${string%,}"
 
         # Get description
-        REPO_DESC_RAW=$(curl -s "https://api.github.com/repos/${REPO_USER}/${REPO_NAME}" | grep "description")
+        REPO_DESC_RAW=$(curl -s --connect-timeout 10 --max-time 30 "https://api.github.com/repos/${REPO_USER}/${REPO_NAME}" | grep "description")
         desc="${REPO_DESC_RAW##*: \"}"
         REPO_DESC="${desc//\",/}"
     fi
@@ -223,8 +223,10 @@ EOF
     if [ -f "$TARGET_DIR/${REPO_NAME}" ] && [ -x "$TARGET_DIR/${REPO_NAME}" ]; then
         MAIN_SCRIPT="${REPO_NAME}"
     else
-        # Find any executable file
-        MAIN_SCRIPT=$(find "$TARGET_DIR" -maxdepth 1 -type f -perm /111 ! -name ".*" -exec basename {} \; | head -1)
+        # Find any executable file (portable method for both GNU and BSD find)
+        MAIN_SCRIPT=$(find "$TARGET_DIR" -maxdepth 1 -type f ! -name ".*" 2>/dev/null | while read -r file; do
+            [ -x "$file" ] && basename "$file" && break
+        done | head -1)
     fi
 
     if [ -z "$MAIN_SCRIPT" ]; then

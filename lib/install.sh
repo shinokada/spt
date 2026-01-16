@@ -16,7 +16,7 @@ fn_install() {
     if [ -z "$DEB_FILES" ]; then
         DEB_COUNT=0
     else
-        DEB_COUNT=$(echo "$DEB_FILES" | wc -l)
+        DEB_COUNT=$(printf '%s\n' "$DEB_FILES" | grep -c .)
     fi
 
     if [ "$DEB_COUNT" -gt 1 ]; then

@@ -24,9 +24,6 @@ fn_generate() {
         }
     fi
 
-    # Use custom output dir if specified
-    OUTPUT_DIR="${OUTPUT:-$DEB_DIR}"
-
     # Create output directory
     echo "Creating output directory ..."
     mkdir -p "$OUTPUT_DIR" || {

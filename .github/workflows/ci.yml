@@ -38,12 +38,13 @@ jobs:
     - name: ShellCheck
       run: |
         shellcheck spt
-        shellcheck lib/*.sh || true  # Don't fail on lib warnings
+        # Check lib files except getoptions.sh (external library)
+        shellcheck lib/clean.sh lib/create.sh lib/generate.sh lib/install.sh lib/list.sh lib/open.sh lib/utils.sh || true
   
   integration-test:
     name: Integration Tests
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.base_ref == 'main')
     
     steps:
     - name: Checkout code
