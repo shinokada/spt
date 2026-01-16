@@ -4,6 +4,13 @@
 fn_install() {
     echo "Looking for Debian package ..."
 
+    # Check if DEB_DIR exists
+    if [ ! -d "$DEB_DIR" ]; then
+        echo "Error: No .deb package found in $DEB_DIR"
+        echo "Please run 'spt generate' first to create a package"
+        exit 1
+    fi
+
     # Find the .deb file
     DEB_FILES=$(find "$DEB_DIR" -maxdepth 1 -name "*.deb" -type f 2>/dev/null)
     DEB_COUNT=$(echo "$DEB_FILES" | grep -c . 2>/dev/null || echo 0)
@@ -18,7 +25,7 @@ fn_install() {
     DEB_FILE=$(echo "$DEB_FILES" | head -1)
 
     if [ -z "$DEB_FILE" ]; then
-        echo "Error: No Debian package found in $DEB_DIR"
+        echo "Error: No .deb package found in $DEB_DIR"
         echo "Please run 'spt generate' first to create a package"
         exit 1
     fi

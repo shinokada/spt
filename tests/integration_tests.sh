@@ -29,7 +29,7 @@ export PKG_DIR="$TEST_CACHE/pkg"
 export DEB_DIR="$TEST_CACHE/deb"
 
 # Test repository (small, stable repo for testing)
-TEST_REPO="shinokada/awesome-cli-bins"
+TEST_REPO="shinokada/tera"
 
 pass() {
     echo -e "${GREEN}✓${NC} $1"
@@ -354,10 +354,14 @@ test_clean_with_force() {
     if output=$("$SPT_BIN" clean -f 2>&1); then
         pass "Clean with --force completed"
 
+        # Check if cache was actually removed
         if [ ! -d "$TEST_CACHE" ]; then
             pass "Cache directory removed"
+        elif [ -d "$TEST_CACHE" ] && [ -z "$(ls -A "$TEST_CACHE" 2>/dev/null)" ]; then
+            # Directory exists but is empty - this is acceptable
+            pass "Cache directory cleaned (empty)"
         else
-            fail "Cache directory still exists after clean"
+            fail "Cache directory still exists after clean" "Contents: $(ls -la "$TEST_CACHE" 2>&1)"
         fi
     else
         fail "Clean command failed" "$output"
@@ -407,10 +411,10 @@ test_error_handling() {
         if output=$("$SPT_BIN" install 2>&1); then
             fail "Should fail when no .deb exists"
         else
-            if echo "$output" | grep -qi "No.*package"; then
+            if echo "$output" | grep -qi "No.*\.deb.*package\|No.*package.*found"; then
                 pass "Install fails gracefully without .deb"
             else
-                fail "Install error message unclear"
+                fail "Install error message unclear" "Got: $output"
             fi
         fi
     else

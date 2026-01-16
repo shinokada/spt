@@ -14,9 +14,13 @@ export USER_NAME=""
 export USER_EMAIL=""
 export ARCHITECTURE=""
 export DEB_NAME=""
-export DEBTEMP_DIR="$HOME/.cache/spt"
-export PKG_DIR="$DEBTEMP_DIR/pkg"
-export DEB_DIR="$DEBTEMP_DIR/deb"
+# Use environment variables if set (for testing), otherwise use defaults
+: "${DEBTEMP_DIR:=$HOME/.cache/spt}"
+export DEBTEMP_DIR
+: "${PKG_DIR:=$DEBTEMP_DIR/pkg}"
+export PKG_DIR
+: "${DEB_DIR:=$DEBTEMP_DIR/deb}"
+export DEB_DIR
 
 readlinkf() {
     [ "${1:-}" ] || return 1

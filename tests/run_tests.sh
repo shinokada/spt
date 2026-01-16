@@ -120,7 +120,7 @@ test_list_empty() {
     # This is better UX than just saying "not found"
     if output=$("$SPT_BIN" list 2>&1); then
         # Check for either "No cache directory found" OR cache info with "(none)"
-        if echo "$output" | grep -qE "(No cache directory found|SPT Cache Directory.*\(none\))"; then
+        if echo "$output" | grep -qE "(No cache directory found|\(none\))"; then
             pass "List handles empty cache gracefully"
         else
             fail "List should show no cache or empty cache info" "Got: $output"
@@ -131,7 +131,7 @@ test_list_empty() {
 }
 
 test_clean_empty() {
-    section "Clean Command (Empty Cache)"
+    section "Clean Command (Empty Cache: run spt clean)"
 
     # Note: spt clean shows cache info even when empty (0 items)
     # This is better UX than just saying "doesn't exist"

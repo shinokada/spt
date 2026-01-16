@@ -2,9 +2,19 @@
 # shellcheck shell=bash
 
 fn_generate() {
+    # Check for package in PKG_DIR first (before using PKG_NAME)
+    PKG_NAME=$(find "$PKG_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" 2>/dev/null | head -1)
+
+    if [ -z "$PKG_NAME" ]; then
+        echo "Error: No pre-package found in $PKG_DIR"
+        echo "Please run 'spt create username/repo' first"
+        exit 1
+    fi
+
+    PKG_PATH="$PKG_DIR/$PKG_NAME"
+
     # Use custom output dir if specified
     OUTPUT_DIR="${OUTPUT:-$DEB_DIR}"
-
     OUTPUT_PATH="$OUTPUT_DIR/${PKG_NAME}.deb"
 
     # Remove only the target output file if it exists
@@ -29,18 +39,6 @@ fn_generate() {
         echo "Error: dpkg-deb not found. Install it with: sudo apt install dpkg"
         exit 1
     fi
-
-    # Check for package in PKG_DIR
-    PKG_NAME=$(find "$PKG_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" 2>/dev/null | head -1)
-
-    if [ -z "$PKG_NAME" ]; then
-        echo "Error: No pre-package found in $PKG_DIR"
-        echo "Please run 'spt create username/repo' first"
-        exit 1
-    fi
-
-    PKG_PATH="$PKG_DIR/$PKG_NAME"
-    OUTPUT_PATH="$OUTPUT_DIR/${PKG_NAME}.deb"
 
     echo "Found pre-package: $PKG_NAME"
 
