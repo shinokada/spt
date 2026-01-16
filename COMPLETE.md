@@ -142,7 +142,7 @@ This document confirms that **ALL** suggested improvements have been implemented
 # Unit tests (run anywhere)
 ./tests/run_tests.sh
 
-# Integration tests (Linux only)
+# Integration tests (Linux; macOS supported with dpkg, some tests may be skipped)
 ./tests/integration_tests.sh
 ```
 

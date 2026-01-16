@@ -5,9 +5,15 @@ fn_generate() {
     # Use custom output dir if specified
     OUTPUT_DIR="${OUTPUT:-$DEB_DIR}"
 
-    # Clean output directory
-    if [ -d "$OUTPUT_DIR" ]; then
-        rm -rf "${OUTPUT_DIR:?}/"*.deb 2>/dev/null || true
+    OUTPUT_PATH="$OUTPUT_DIR/${PKG_NAME}.deb"
+
+    # Remove only the target output file if it exists
+    if [ -f "$OUTPUT_PATH" ]; then
+        echo "Overwriting existing package: $OUTPUT_PATH"
+        rm -f "$OUTPUT_PATH" || {
+            echo "Error: Unable to overwrite existing package: $OUTPUT_PATH"
+            exit 1
+        }
     fi
 
     # Create output directory

@@ -197,7 +197,7 @@ spt install
    ```
 
 2. Add missing dependencies:
-   ```
+   ```text
    Depends: bash (>= 4.0), curl, jq
    ```
 

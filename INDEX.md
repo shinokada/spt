@@ -28,7 +28,7 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 ### Reference
 - **[man/spt.1](man/spt.1)** - Man page (use: `man ./man/spt.1`)
 - **[completions/spt-completion.bash](completions/spt-completion.bash)** - Bash completion
-- **[config.example](config.example)** - Configuration example (future)
+- **[config.example](config.example)** - Configuration example
 
 ### Development
 - **[tests/README.md](tests/README.md)** - Testing documentation

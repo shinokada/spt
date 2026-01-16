@@ -211,13 +211,13 @@ EOF
         MAIN_SCRIPT="${REPO_NAME}"
     else
         # Find any executable file
-        MAIN_SCRIPT=$(find "$TARGET_DIR" -maxdepth 1 -type f -executable ! -name ".*" -printf "%f\n" | head -1)
+        MAIN_SCRIPT=$(find "$TARGET_DIR" -maxdepth 1 -type f -perm /111 ! -name ".*" -exec basename {} \; | head -1)
     fi
 
     if [ -z "$MAIN_SCRIPT" ]; then
         echo "Warning: Could not automatically detect main executable."
         echo "Available files in repository:"
-        find "$TARGET_DIR" -maxdepth 1 -type f -printf "%f\n" 2>/dev/null | head -10
+        find "$TARGET_DIR" -maxdepth 1 -type f -exec basename {} \; 2>/dev/null | head -10
 
         if [ "${YES:-0}" != 1 ]; then
             read -r -p "Enter the main script filename: " MAIN_SCRIPT

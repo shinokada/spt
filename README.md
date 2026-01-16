@@ -177,6 +177,22 @@ spt clean
 spt clean -f
 ```
 
+#### `spt open`
+Opens the pre-package directory in an editor.
+
+```bash
+spt open
+```
+
+**What it does:**
+1. Finds the first pre-package in the cache
+2. Opens it in VSCode if code is available
+3. Falls back to $EDITOR if VSCode is not installed
+
+**Notes:**
+- Requires an existing pre-package (run spt create first)
+- Some files may be owned by root, so editor permission prompts may appear
+
 ### Workflow
 
 ```bash
@@ -424,7 +440,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Install SPT
         run: |
           wget https://github.com/shinokada/spt/releases/latest/download/spt.deb
@@ -434,7 +450,7 @@ jobs:
           spt create -y ${{ github.repository }}
           spt generate -o dist/
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: debian-package
           path: dist/*.deb
@@ -504,7 +520,7 @@ chmod +x tests/run_tests.sh
 ./tests/run_tests.sh
 ```
 
-### Run Integration Tests (Linux only)
+### Run Integration Tests
 
 ```bash
 chmod +x tests/integration_tests.sh

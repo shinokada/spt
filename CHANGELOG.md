@@ -157,12 +157,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
-- **0.1.0** - Major feature release with new commands and improvements
+- **0.2.0** - Major feature release with new commands and improvements
 - **0.0.9** - Initial release with basic functionality
 
 ## Migration Notes
 
-### Upgrading from 0.0.9 to 0.1.0
+### Upgrading from 0.0.9 to 0.2.0
 
 No breaking changes. All existing workflows will continue to work.
 

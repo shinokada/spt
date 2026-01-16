@@ -65,7 +65,7 @@ chmod +x tests/*.sh
 # Run unit tests
 ./tests/run_tests.sh
 
-# Run integration tests (Linux only, requires GitHub auth)
+# Run integration tests (Linux or macOS with dpkg; requires GitHub auth)
 ./tests/integration_tests.sh
 ```
 
@@ -216,7 +216,7 @@ sudo apt install gh
 gh auth login
 ```
 
-### "Integration tests must run on Linux"
+### "Integration tests require dpkg"
 The tests now check for actual tools (dpkg) instead of OS.
 ```bash
 # On macOS, install dpkg

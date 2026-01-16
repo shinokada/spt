@@ -100,7 +100,7 @@ chmod +x tests/*.sh
 ## What the Tests Will Show
 
 ### With dpkg installed:
-```
+```text
 SPT Integration Test Suite
 ==========================
 
@@ -133,7 +133,7 @@ Failed: 0
 ```
 
 ### Without dpkg installed:
-```
+```text
 Operating System: Darwin
 Checking required commands...
 ✓ Found: git
