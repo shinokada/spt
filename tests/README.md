@@ -83,7 +83,7 @@ Tests output colored results:
 - ⊘ Yellow = Skipped
 
 Example output:
-```
+```text
 SPT Test Suite
 ==============
 

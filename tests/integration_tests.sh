@@ -33,8 +33,8 @@ TEST_REPO="shinokada/awesome-cli-bins"
 
 pass() {
     echo -e "${GREEN}✓${NC} $1"
-    ((TESTS_PASSED++))
-    ((TESTS_RUN++))
+    ((++TESTS_PASSED))
+    ((++TESTS_RUN))
 }
 
 fail() {
@@ -42,8 +42,8 @@ fail() {
     if [ -n "${2:-}" ]; then
         echo "  Error: $2"
     fi
-    ((TESTS_FAILED++))
-    ((TESTS_RUN++))
+    ((++TESTS_FAILED))
+    ((++TESTS_RUN))
 }
 
 skip() {
@@ -69,15 +69,15 @@ cleanup() {
 
 check_prerequisites() {
     section "Prerequisites Check"
-    
+
     local all_ok=true
     local os_name=$(uname)
-    
+
     echo "Operating System: $os_name"
-    
+
     # Check for required commands instead of OS
     echo "Checking required commands..."
-    
+
     for cmd in git curl; do
         if ! command -v "$cmd" >/dev/null 2>&1; then
             echo -e "${RED}✗${NC} Required: $cmd is missing"
@@ -86,7 +86,7 @@ check_prerequisites() {
             echo -e "${GREEN}✓${NC} Found: $cmd"
         fi
     done
-    
+
     # Check for dpkg/dpkg-deb (needed for generate)
     if ! command -v dpkg-deb >/dev/null 2>&1; then
         echo -e "${YELLOW}⊘${NC} dpkg-deb not found - generate tests will be skipped"
@@ -95,7 +95,7 @@ check_prerequisites() {
     else
         echo -e "${GREEN}✓${NC} Found: dpkg-deb"
     fi
-    
+
     # Check for gh
     if ! command -v gh >/dev/null 2>&1; then
         echo -e "${RED}✗${NC} Required: gh (GitHub CLI) is missing"
@@ -103,7 +103,7 @@ check_prerequisites() {
         all_ok=false
     else
         echo -e "${GREEN}✓${NC} Found: gh"
-        
+
         # Check if authenticated
         if ! gh auth status >/dev/null 2>&1; then
             echo -e "${YELLOW}⊘${NC} GitHub CLI not authenticated"
@@ -113,19 +113,19 @@ check_prerequisites() {
             echo -e "${GREEN}✓${NC} GitHub CLI authenticated"
         fi
     fi
-    
+
     if [ "$all_ok" = false ]; then
         echo ""
         echo -e "${RED}Prerequisites not met. Please install missing tools.${NC}"
         exit 1
     fi
-    
+
     pass "All prerequisites met"
 }
 
 test_create_basic() {
     section "Create Command (Basic)"
-    
+
     # Test with --yes flag
     if output=$("$SPT_BIN" create -y "$TEST_REPO" 2>&1); then
         if [ -d "$PKG_DIR" ]; then
@@ -138,7 +138,7 @@ test_create_basic() {
         fail "Create command failed" "$output"
         return
     fi
-    
+
     # Check package structure
     PKG_NAME=$(ls "$PKG_DIR" 2>/dev/null | head -1)
     if [ -n "$PKG_NAME" ]; then
@@ -147,20 +147,20 @@ test_create_basic() {
         fail "No package directory found"
         return
     fi
-    
+
     PKG_PATH="$PKG_DIR/$PKG_NAME"
-    
+
     # Check DEBIAN/control
     if [ -f "$PKG_PATH/DEBIAN/control" ]; then
         pass "DEBIAN/control file exists"
-        
+
         # Validate control file contents
         if grep -q "Package:" "$PKG_PATH/DEBIAN/control"; then
             pass "control file has Package field"
         else
             fail "control file missing Package field"
         fi
-        
+
         if grep -q "Version:" "$PKG_PATH/DEBIAN/control"; then
             pass "control file has Version field"
         else
@@ -169,21 +169,21 @@ test_create_basic() {
     else
         fail "DEBIAN/control file missing"
     fi
-    
+
     # Check DEBIAN/preinst
     if [ -f "$PKG_PATH/DEBIAN/preinst" ]; then
         pass "DEBIAN/preinst file exists"
     else
         fail "DEBIAN/preinst file missing"
     fi
-    
+
     # Check usr/bin
     if [ -d "$PKG_PATH/usr/bin" ]; then
         pass "usr/bin directory exists"
     else
         fail "usr/bin directory missing"
     fi
-    
+
     # Check usr/share
     if [ -d "$PKG_PATH/usr/share" ]; then
         pass "usr/share directory exists"
@@ -194,14 +194,14 @@ test_create_basic() {
 
 test_list_command() {
     section "List Command (With Package)"
-    
+
     if output=$("$SPT_BIN" list 2>&1); then
         if echo "$output" | grep -q "Pre-packages"; then
             pass "List shows pre-packages section"
         else
             fail "List output missing pre-packages" "$output"
         fi
-        
+
         if echo "$output" | grep -q "Generated Debian packages"; then
             pass "List shows deb packages section"
         else
@@ -214,7 +214,7 @@ test_list_command() {
 
 test_generate_basic() {
     section "Generate Command (Basic)"
-    
+
     # Check if dpkg-deb is available
     if ! command -v dpkg-deb >/dev/null 2>&1; then
         skip "Generate command tests" "dpkg-deb not available"
@@ -222,7 +222,7 @@ test_generate_basic() {
         skip ".deb contents check" "dpkg-deb not available"
         return
     fi
-    
+
     if output=$("$SPT_BIN" generate 2>&1); then
         if [ -d "$DEB_DIR" ]; then
             pass "Generate command succeeded"
@@ -234,7 +234,7 @@ test_generate_basic() {
         fail "Generate command failed" "$output"
         return
     fi
-    
+
     # Check .deb file exists
     DEB_FILE=$(find "$DEB_DIR" -name "*.deb" -type f 2>/dev/null | head -1)
     if [ -n "$DEB_FILE" ]; then
@@ -243,14 +243,14 @@ test_generate_basic() {
         fail "No .deb file found in $DEB_DIR"
         return
     fi
-    
+
     # Validate .deb with dpkg-deb
     if dpkg-deb -I "$DEB_FILE" >/dev/null 2>&1; then
         pass ".deb file is valid (dpkg-deb -I)"
     else
         fail ".deb file is invalid"
     fi
-    
+
     # Check contents
     if dpkg-deb -c "$DEB_FILE" >/dev/null 2>&1; then
         pass ".deb file contents readable (dpkg-deb -c)"
@@ -261,24 +261,24 @@ test_generate_basic() {
 
 test_generate_dry_run() {
     section "Generate Command (Dry Run)"
-    
+
     if ! command -v dpkg-deb >/dev/null 2>&1; then
         skip "Dry run tests" "dpkg-deb not available"
         return
     fi
-    
+
     # Clean deb dir first
     rm -rf "$DEB_DIR"/*
-    
+
     if output=$("$SPT_BIN" generate --dry-run 2>&1); then
         pass "Dry run completed"
-        
+
         if echo "$output" | grep -q "DRY RUN MODE"; then
             pass "Dry run shows correct mode"
         else
             fail "Dry run missing mode indicator"
         fi
-        
+
         # Check that no .deb was created
         if [ -z "$(find "$DEB_DIR" -name "*.deb" 2>/dev/null)" ]; then
             pass "Dry run did not create .deb file"
@@ -288,7 +288,7 @@ test_generate_dry_run() {
     else
         fail "Dry run failed" "$output"
     fi
-    
+
     # Regenerate for next tests if dpkg-deb available
     if command -v dpkg-deb >/dev/null 2>&1; then
         "$SPT_BIN" generate >/dev/null 2>&1
@@ -297,15 +297,15 @@ test_generate_dry_run() {
 
 test_generate_custom_output() {
     section "Generate Command (Custom Output)"
-    
+
     if ! command -v dpkg-deb >/dev/null 2>&1; then
         skip "Custom output tests" "dpkg-deb not available"
         return
     fi
-    
+
     CUSTOM_OUT="/tmp/spt-custom-output-$$"
     mkdir -p "$CUSTOM_OUT"
-    
+
     if output=$("$SPT_BIN" generate -o "$CUSTOM_OUT" 2>&1); then
         if [ -f "$CUSTOM_OUT"/*.deb ]; then
             pass "Custom output directory works"
@@ -315,13 +315,13 @@ test_generate_custom_output() {
     else
         fail "Generate with custom output failed" "$output"
     fi
-    
+
     rm -rf "$CUSTOM_OUT"
 }
 
 test_open_command() {
     section "Open Command"
-    
+
     # This will fail if VSCode not installed, which is okay
     if command -v code >/dev/null 2>&1; then
         # We can't actually test opening VSCode, just check the command runs
@@ -342,7 +342,7 @@ test_open_command() {
 
 test_clean_with_force() {
     section "Clean Command (Force)"
-    
+
     # Check cache exists before clean
     if [ -d "$TEST_CACHE" ]; then
         pass "Test cache exists before clean"
@@ -350,10 +350,10 @@ test_clean_with_force() {
         fail "Test cache missing before clean"
         return
     fi
-    
+
     if output=$("$SPT_BIN" clean -f 2>&1); then
         pass "Clean with --force completed"
-        
+
         if [ ! -d "$TEST_CACHE" ]; then
             pass "Cache directory removed"
         else
@@ -366,7 +366,7 @@ test_clean_with_force() {
 
 test_error_handling() {
     section "Error Handling Tests"
-    
+
     # Test with invalid repo format
     if output=$("$SPT_BIN" create invalid-format 2>&1); then
         fail "Should reject invalid repo format"
@@ -377,7 +377,7 @@ test_error_handling() {
             fail "Error message unclear for invalid format"
         fi
     fi
-    
+
     # Test with non-existent repo
     if output=$("$SPT_BIN" create -y nonexistent/doesnotexist123456789 2>&1); then
         fail "Should reject non-existent repo"
@@ -388,7 +388,7 @@ test_error_handling() {
             fail "Error message unclear for non-existent repo"
         fi
     fi
-    
+
     # Test generate without create
     cleanup
     setup
@@ -401,7 +401,7 @@ test_error_handling() {
             fail "Generate error message unclear"
         fi
     fi
-    
+
     # Test install without generate (only if dpkg available)
     if command -v dpkg-deb >/dev/null 2>&1; then
         if output=$("$SPT_BIN" install 2>&1); then
@@ -430,10 +430,10 @@ run_integration_tests() {
     echo "Note: These tests will create real packages and make API calls"
     echo "      Tests requiring dpkg-deb will be skipped if not available"
     echo ""
-    
+
     check_prerequisites
     setup
-    
+
     # Create and test package
     test_create_basic
     test_list_command
@@ -442,12 +442,12 @@ run_integration_tests() {
     test_generate_custom_output
     test_open_command
     test_clean_with_force
-    
+
     # Error handling (creates new cache)
     test_error_handling
-    
+
     cleanup
-    
+
     # Summary
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -458,7 +458,7 @@ run_integration_tests() {
     echo -e "${GREEN}Passed: $TESTS_PASSED${NC}"
     echo -e "${RED}Failed: $TESTS_FAILED${NC}"
     echo ""
-    
+
     if [ $TESTS_FAILED -eq 0 ]; then
         echo -e "${GREEN}✓ All integration tests passed!${NC}"
         exit 0

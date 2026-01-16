@@ -1,4 +1,7 @@
-fn_create(){
+#!/usr/bin/env bash
+# shellcheck shell=bash
+
+fn_create() {
     # if $1 not there exit
     if [ $# -eq 0 ]; then
         echo "No arguments provided. Use spt create username/repo"
@@ -14,8 +17,9 @@ fn_create(){
 
     ### checking
     echo "Checking OS ..."
-    if [[ ! $(uname) == "Linux" ]]; then
-        echo "Error: You need to run this on Linux."
+    os_name=$(uname)
+    if [[ "$os_name" != "Linux" && "$os_name" != "Darwin" ]]; then
+        echo "Error: Unsupported OS: $os_name (Linux/macOS only)."
         exit 1
     fi
 
@@ -55,17 +59,17 @@ fn_create(){
     # get REPO_NAME and USER from $1
     REPO_USER=$(first "/" "$1")
     REPO_NAME=$(second "/" "$1")
-    
+
     echo "Repository: ${REPO_USER}/${REPO_NAME}"
-    
+
     echo "Fetching repository information ..."
-    
+
     # Check if jq is available for better JSON parsing
     if command -v jq >/dev/null 2>&1; then
         # Use jq for reliable JSON parsing
         API_RESPONSE=$(curl -sH "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/${REPO_USER}/${REPO_NAME}/releases/latest" 2>/dev/null)
-        
+
         if [ -z "$API_RESPONSE" ] || [ "$(echo "$API_RESPONSE" | jq -r '.message // empty')" = "Not Found" ]; then
             echo "Error: Could not find repository ${REPO_USER}/${REPO_NAME} or it has no releases."
             echo "Please ensure:"
@@ -73,7 +77,7 @@ fn_create(){
             echo "  2. The repository has at least one release"
             exit 1
         fi
-        
+
         REPO_VERSION=$(echo "$API_RESPONSE" | jq -r '.tag_name | ltrimstr("v")')
         REPO_DESC=$(curl -s "https://api.github.com/repos/${REPO_USER}/${REPO_NAME}" | jq -r '.description // "No description"')
     else
@@ -85,17 +89,17 @@ fn_create(){
             exit 1
         }
 
-        string="${HTML##*: \"v}"
         string="${HTML##*: \"}"
-        string1="${string//\"/}"
-        REPO_VERSION="${string1//,/}"
-        
+        string="${string#v}"
+        string="${string%%\"*}"
+        REPO_VERSION="${string%,}"
+
         # Get description
         REPO_DESC_RAW=$(curl -s "https://api.github.com/repos/${REPO_USER}/${REPO_NAME}" | grep "description")
         desc="${REPO_DESC_RAW##*: \"}"
         REPO_DESC="${desc//\",/}"
     fi
-    
+
     # Validate version was found
     if [ -z "$REPO_VERSION" ] || [ "$REPO_VERSION" = "null" ]; then
         echo "Error: Could not determine version for ${REPO_USER}/${REPO_NAME}"
@@ -145,15 +149,15 @@ fn_create(){
     # create directory structure
     echo "Creating directory structure ..."
     mkdir -p "$PKG_DIR/$DEB_NAME/DEBIAN" \
-             "$PKG_DIR/$DEB_NAME/usr/bin" \
-             "$PKG_DIR/$DEB_NAME/usr/share/$REPO_NAME" || {
+        "$PKG_DIR/$DEB_NAME/usr/bin" \
+        "$PKG_DIR/$DEB_NAME/usr/share/$REPO_NAME" || {
         echo "Error: Unable to create directory structure."
         exit 1
     }
 
     # create control file
     echo "Creating control file ..."
-cat <<EOF >"$PKG_DIR/$DEB_NAME/DEBIAN/control"
+    cat <<EOF >"$PKG_DIR/$DEB_NAME/DEBIAN/control"
 Package: ${REPO_NAME}
 Version: ${REPO_VERSION}
 Architecture: ${ARCHITECTURE}
@@ -166,7 +170,7 @@ EOF
 
     # create preinst script
     echo "Creating preinst script ..."
-cat <<EOF >"$PKG_DIR/$DEB_NAME/DEBIAN/preinst"
+    cat <<EOF >"$PKG_DIR/$DEB_NAME/DEBIAN/preinst"
 #!/bin/bash
 # This removes an old version.
 
@@ -186,7 +190,7 @@ EOF
     # clone the repo
     echo "Cloning repository ..."
     TARGET_DIR="$PKG_DIR/$DEB_NAME/usr/share/$REPO_NAME"
-    
+
     # Try HTTPS first, fall back to SSH
     if ! git clone --quiet "https://github.com/${REPO_USER}/${REPO_NAME}.git" "$TARGET_DIR" 2>/dev/null; then
         echo "HTTPS clone failed, trying SSH ..."
@@ -201,7 +205,7 @@ EOF
     # Detect main script automatically
     echo "Detecting main executable ..."
     MAIN_SCRIPT=""
-    
+
     # Look for executable file matching repo name
     if [ -f "$TARGET_DIR/${REPO_NAME}" ] && [ -x "$TARGET_DIR/${REPO_NAME}" ]; then
         MAIN_SCRIPT="${REPO_NAME}"
@@ -209,12 +213,12 @@ EOF
         # Find any executable file
         MAIN_SCRIPT=$(find "$TARGET_DIR" -maxdepth 1 -type f -executable ! -name ".*" -printf "%f\n" | head -1)
     fi
-    
+
     if [ -z "$MAIN_SCRIPT" ]; then
         echo "Warning: Could not automatically detect main executable."
         echo "Available files in repository:"
-        ls -1 "$TARGET_DIR" | head -10
-        
+        find "$TARGET_DIR" -maxdepth 1 -type f -printf "%f\n" 2>/dev/null | head -10
+
         if [ "${YES:-0}" != 1 ]; then
             read -r -p "Enter the main script filename: " MAIN_SCRIPT
             if [ -z "$MAIN_SCRIPT" ] || [ ! -f "$TARGET_DIR/$MAIN_SCRIPT" ]; then
@@ -243,7 +247,7 @@ EOF
     # change the permissions (only if needed - for files that will be installed system-wide)
     chmod 755 "$PKG_DIR/$DEB_NAME/usr/bin/${REPO_NAME}"
     chmod 755 "$PKG_DIR/$DEB_NAME/DEBIAN/preinst"
-    
+
     # Set ownership only for files that need it
     # No sudo needed for user cache directory
     chmod -R u+rwX,go+rX "$PKG_DIR/$DEB_NAME"
@@ -252,7 +256,7 @@ EOF
     echo "✓ Pre-package created successfully!"
     echo "  Location: $PKG_DIR/$DEB_NAME"
     echo ""
-    
+
     if [ "${CODE:-0}" = 1 ]; then
         if command -v code >/dev/null 2>&1; then
             echo "Opening in VSCode ..."
@@ -265,7 +269,7 @@ EOF
     else
         echo "Tip: Use 'spt open' or 'code $PKG_DIR/$DEB_NAME' to edit"
     fi
-    
+
     echo ""
     echo "Next steps:"
     echo "  1. Review/edit the package: $PKG_DIR/$DEB_NAME"

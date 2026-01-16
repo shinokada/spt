@@ -98,7 +98,7 @@ gh auth login
 3. Manually specify when prompted
 
 **Best Practice Repository Structure:**
-```
+```text
 repo-name/
 ├── repo-name          # Main executable (same name as repo)
 ├── lib/              # Supporting files
@@ -314,7 +314,7 @@ source "$script_dir/lib/utils.sh"
    ping -c 3 github.com
    ```
 
-2. Check GitHub status: https://www.githubstatus.com/
+2. Check GitHub status: [githubstatus.com](https://www.githubstatus.com/)
 
 3. Try with verbose output:
    ```bash
@@ -432,7 +432,7 @@ If none of these solutions work:
    ```
 
 4. **Create an issue:**
-   - Go to https://github.com/shinokada/spt/issues
+   - Go to [GitHub Issues](https://github.com/shinokada/spt/issues)
    - Include version info, error messages, and steps to reproduce
 
 ## Quick Reference

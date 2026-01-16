@@ -6,7 +6,7 @@ If you want to test the updated SPT without creating a .deb package:
 
 ```bash
 # Navigate to the spt directory
-cd /Users/shinichiokada/Bash/spt
+cd /path/to/spt
 
 # Make the script executable
 chmod +x spt
@@ -19,7 +19,7 @@ export PATH="$PWD:$PATH"
 spt --version
 
 # Or add to PATH permanently in ~/.bashrc or ~/.zshrc
-echo 'export PATH="/Users/shinichiokada/Bash/spt:$PATH"' >> ~/.bashrc
+echo 'export PATH="/path/to/spt:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -29,7 +29,7 @@ Once you've tested and are happy with the changes:
 
 ```bash
 # 1. Make sure you're in a Linux environment
-# (This won't work on macOS since dpkg is Linux-only)
+# (On macOS, install dpkg via: brew install dpkg)
 
 # 2. If testing on Linux, create package for SPT itself
 spt create -y shinokada/spt
@@ -41,8 +41,8 @@ spt generate
 ls ~/.cache/spt/deb/
 
 # 5. Upload to GitHub
-gh release create v0.1.0 \
-  --title "Version 0.1.0 - Major Feature Release" \
+gh release create v0.2.0 \
+  --title "Version 0.2.0 - Major Feature Release" \
   --notes-file CHANGELOG.md \
   ~/.cache/spt/deb/spt_*.deb
 ```
@@ -96,7 +96,7 @@ gh release create v0.1.0 \
 ## Files Summary
 
 ### Modified Core Files
-- `spt` - Main executable (v0.1.0)
+- `spt` - Main executable (v0.2.0)
 - `lib/create.sh` - Enhanced create command
 - `lib/generate.sh` - Enhanced generate command
 - `lib/install.sh` - Enhanced install command
@@ -124,7 +124,7 @@ Before committing:
 
 - [ ] All files are properly formatted
 - [ ] Scripts have correct permissions (chmod +x spt)
-- [ ] Version updated to 0.1.0 in main spt file
+- [ ] Version updated to 0.2.0 in main spt file
 - [ ] CHANGELOG.md has release date
 - [ ] All shellcheck warnings addressed
 - [ ] Documentation is accurate
@@ -137,7 +137,7 @@ Before committing:
 git add .
 
 # Commit
-git commit -m "Version 0.1.0 - Major feature release
+git commit -m "Version 0.2.0 - Major feature release
 
 - Add list, clean, and open commands
 - Add --yes, --dry-run, --force, --output, --code flags
@@ -151,11 +151,11 @@ git commit -m "Version 0.1.0 - Major feature release
 See CHANGELOG.md and IMPROVEMENTS.md for full details."
 
 # Tag the release
-git tag -a v0.1.0 -m "Release v0.1.0"
+git tag -a v0.2.0 -m "Release v0.2.0"
 
 # Push
 git push origin main
-git push origin v0.1.0
+git push origin v0.2.0
 ```
 
 ## Next Steps

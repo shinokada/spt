@@ -236,8 +236,8 @@ man spt
 git push
 
 # Tag triggers release
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.2.0
+git push origin v0.2.0
 # Automatically builds and releases
 ```
 
@@ -245,7 +245,7 @@ git push origin v0.1.0
 
 ## 📁 Complete File Structure
 
-```
+```text
 spt/
 ├── spt                              ✅ Main executable (updated)
 ├── lib/                            
@@ -309,7 +309,7 @@ spt/
 
 ### 1. Run Tests Locally
 ```bash
-cd /Users/shinichiokada/Bash/spt
+cd /path/to/spt
 
 # Make executable
 chmod +x spt
@@ -354,7 +354,7 @@ sudo apt install shellcheck jq lintian
 ### 5. Commit Everything
 ```bash
 git add .
-git commit -m "Version 0.1.0 - Complete implementation
+git commit -m "Version 0.2.0 - Complete implementation
 
 - All suggested improvements implemented
 - Added automated test suites (unit + integration)
@@ -365,7 +365,7 @@ git commit -m "Version 0.1.0 - Complete implementation
 
 See CHANGELOG.md and IMPROVEMENTS.md for full details."
 
-git tag -a v0.1.0 -m "Release v0.1.0"
+git tag -a v0.2.0 -m "Release v0.2.0"
 ```
 
 ---
@@ -428,16 +428,16 @@ Nothing is missing. Everything has been implemented and documented.
 ## 📝 Final Notes
 
 ### What's NOT Yet Implemented (Intentionally)
-These are features mentioned for **future versions**, not v0.1.0:
+These are features mentioned for **future versions**, not v0.2.0:
 
 - Configuration file support (template created, parser not implemented)
 - RPM package support
 - Package signing
 - Multi-architecture cross-compilation
 
-These are documented in CHANGELOG.md under "Planned" and are **not part of v0.1.0**.
+These are documented in CHANGELOG.md under "Planned" and are **not part of v0.2.0**.
 
-### What IS Implemented (v0.1.0)
+### What IS Implemented (v0.2.0)
 **EVERYTHING** from the original suggestions:
 1. ✅ All security fixes
 2. ✅ All new commands

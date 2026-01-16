@@ -1,7 +1,7 @@
 # SPT Improvement Summary
 
 ## Overview
-This document summarizes all improvements made to SPT (Simple Package Tool) version 0.1.0.
+This document summarizes all improvements made to SPT (Simple Package Tool) version 0.2.0.
 
 ## Files Modified
 
@@ -103,7 +103,7 @@ $ spt create shinokada/teffects
 # Manual script detection
 ```
 
-**After (v0.1.0):**
+**After (v0.2.0):**
 ```bash
 $ spt create shinokada/teffects
 Checking OS ...
@@ -314,16 +314,16 @@ All improvements maintain or improve performance:
 
 ### Immediate (Ready to Use)
 1. Test all commands thoroughly
-2. Update version to 0.1.0
+2. Update version to 0.2.0
 3. Generate new .deb package
 4. Create GitHub release
 5. Update repository
 
 ### Short Term (Optional Enhancements)
-1. Add bash completion
-2. Add man pages
-3. Create test suite
-4. Add CI/CD workflow
+1. ✅ Bash completion (implemented in completions/)
+2. ✅ Man pages (implemented in man/spt.1)
+3. ✅ Test suite (implemented in tests/)
+4. ✅ CI/CD workflow (implemented in .github/workflows/)
 
 ### Long Term (Future Features)
 1. Configuration file support

@@ -529,7 +529,7 @@ Please see LICENSE file.
 
 ## Changelog
 
-### v0.1.0
+### v0.2.0
 - Added `list` and `clean` commands
 - Added `--yes` flag for non-interactive mode
 - Added `--dry-run` for generate command

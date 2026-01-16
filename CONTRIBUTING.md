@@ -69,7 +69,7 @@ spt --version
 
 ### Project Structure
 
-```
+```text
 spt/
 ├── spt                 # Main executable
 ├── lib/               # Library modules
@@ -166,7 +166,7 @@ DEBTEMP_DIR="$HOME/.cache/spt"
 local file_name="package.deb"
 
 # Constants: UPPER_CASE
-readonly VERSION="0.1.0"
+readonly VERSION="0.2.0"
 ```
 
 #### 3. Error Handling
@@ -241,7 +241,7 @@ Common shellcheck directives used in SPT:
 ```bash
 # Disable SC2034 (unused variable) for shared variables
 # shellcheck disable=SC2034
-VERSION="0.1.0"
+VERSION="0.2.0"
 
 # Disable SC1091 (can't follow source) for dynamic sourcing
 # shellcheck disable=SC1091
@@ -399,7 +399,7 @@ For maintainers:
    # Create GitHub release
    gh release create v0.2.0 \
      --title "v0.2.0" \
-     --notes "$(cat CHANGELOG.md | sed -n '/## \[0.2.0\]/,/## \[0.1.0\]/p' | head -n -1)" \
+     --notes "$(cat CHANGELOG.md | sed -n '/## \[0.2.0\]/,/## \[0.2.0\]/p' | head -n -1)" \
      ~/.cache/spt/deb/*.deb
    ```
 
@@ -407,10 +407,10 @@ For maintainers:
 
 ### High Priority
 
-- [ ] Comprehensive test suite with bats
-- [ ] GitHub Actions CI/CD workflow
-- [ ] Man page generation
-- [ ] Bash completion script
+- [x] Comprehensive test suite ✅ (see tests/)
+- [x] GitHub Actions CI/CD workflow ✅ (see .github/workflows/)
+- [x] Man page ✅ (see man/spt.1)
+- [x] Bash completion script ✅ (see completions/)
 - [ ] Package signing support
 - [ ] Better dependency resolution
 

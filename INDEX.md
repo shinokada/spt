@@ -36,7 +36,7 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 - **[.github/workflows/release.yml](.github/workflows/release.yml)** - Release workflow
 
 ### Summaries
-- **[IMPROVEMENTS.md](IMPROVEMENTS.md)** - All improvements made in v0.1.0
+- **[IMPROVEMENTS.md](IMPROVEMENTS.md)** - All improvements made in v0.2.0
 - **[COMPLETE.md](COMPLETE.md)** - Verification that everything is implemented
 
 ---
@@ -45,53 +45,53 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 
 ### Installation
 
-| Document | What's Inside |
-|----------|---------------|
+| Document                                         | What's Inside                |
+| ------------------------------------------------ | ---------------------------- |
 | [README.md#installation](README.md#installation) | Installing from .deb package |
-| [INSTALL.md](INSTALL.md) | Testing without installing |
-| [README.md#requirements](README.md#requirements) | Dependencies needed |
+| [INSTALL.md](INSTALL.md)                         | Testing without installing   |
+| [README.md#requirements](README.md#requirements) | Dependencies needed          |
 
 ### Commands
 
-| Command | Documentation |
-|---------|---------------|
-| `create` | [README.md#spt-create](README.md#spt-create) |
+| Command    | Documentation                                    |
+| ---------- | ------------------------------------------------ |
+| `create`   | [README.md#spt-create](README.md#spt-create)     |
 | `generate` | [README.md#spt-generate](README.md#spt-generate) |
-| `install` | [README.md#spt-install](README.md#spt-install) |
-| `list` | [README.md#spt-list](README.md#spt-list) |
-| `clean` | [README.md#spt-clean](README.md#spt-clean) |
-| `open` | [README.md#spt-open](README.md#spt-open) |
+| `install`  | [README.md#spt-install](README.md#spt-install)   |
+| `list`     | [README.md#spt-list](README.md#spt-list)         |
+| `clean`    | [README.md#spt-clean](README.md#spt-clean)       |
+| `open`     | [README.md#spt-open](README.md#spt-open)         |
 
 ### Features
 
-| Feature | Documentation |
-|---------|---------------|
-| Bash Completion | [README.md#bash-completion](README.md#bash-completion) |
-| Man Pages | [README.md#man-pages](README.md#man-pages) |
-| Testing | [README.md#testing](README.md#testing), [tests/README.md](tests/README.md) |
-| CI/CD | [README.md#integration-with-github-actions](README.md#integration-with-github-actions) |
-| Architecture Detection | [README.md#features](README.md#features) |
-| Dry Run | [README.md#spt-generate](README.md#spt-generate) |
+| Feature                | Documentation                                                                          |
+| ---------------------- | -------------------------------------------------------------------------------------- |
+| Bash Completion        | [README.md#bash-completion](README.md#bash-completion)                                 |
+| Man Pages              | [README.md#man-pages](README.md#man-pages)                                             |
+| Testing                | [README.md#testing](README.md#testing), [tests/README.md](tests/README.md)             |
+| CI/CD                  | [README.md#integration-with-github-actions](README.md#integration-with-github-actions) |
+| Architecture Detection | [README.md#features](README.md#features)                                               |
+| Dry Run                | [README.md#spt-generate](README.md#spt-generate)                                       |
 
 ### Troubleshooting
 
-| Issue Type | Documentation |
-|------------|---------------|
-| Installation | [TROUBLESHOOTING.md#installation-issues](TROUBLESHOOTING.md#installation-issues) |
-| Create Command | [TROUBLESHOOTING.md#create-command-issues](TROUBLESHOOTING.md#create-command-issues) |
+| Issue Type       | Documentation                                                                            |
+| ---------------- | ---------------------------------------------------------------------------------------- |
+| Installation     | [TROUBLESHOOTING.md#installation-issues](TROUBLESHOOTING.md#installation-issues)         |
+| Create Command   | [TROUBLESHOOTING.md#create-command-issues](TROUBLESHOOTING.md#create-command-issues)     |
 | Generate Command | [TROUBLESHOOTING.md#generate-command-issues](TROUBLESHOOTING.md#generate-command-issues) |
-| Install Command | [TROUBLESHOOTING.md#install-command-issues](TROUBLESHOOTING.md#install-command-issues) |
-| Testing | [tests/README.md#troubleshooting](tests/README.md#troubleshooting) |
+| Install Command  | [TROUBLESHOOTING.md#install-command-issues](TROUBLESHOOTING.md#install-command-issues)   |
+| Testing          | [tests/README.md#troubleshooting](tests/README.md#troubleshooting)                       |
 
 ### Development
 
-| Topic | Documentation |
-|-------|---------------|
-| Setting Up | [CONTRIBUTING.md#development-setup](CONTRIBUTING.md#development-setup) |
-| Code Style | [CONTRIBUTING.md#coding-standards](CONTRIBUTING.md#coding-standards) |
-| Testing | [CONTRIBUTING.md#testing](CONTRIBUTING.md#testing), [tests/README.md](tests/README.md) |
-| Pull Requests | [CONTRIBUTING.md#submitting-changes](CONTRIBUTING.md#submitting-changes) |
-| Release Process | [CONTRIBUTING.md#release-process](CONTRIBUTING.md#release-process) |
+| Topic           | Documentation                                                                          |
+| --------------- | -------------------------------------------------------------------------------------- |
+| Setting Up      | [CONTRIBUTING.md#development-setup](CONTRIBUTING.md#development-setup)                 |
+| Code Style      | [CONTRIBUTING.md#coding-standards](CONTRIBUTING.md#coding-standards)                   |
+| Testing         | [CONTRIBUTING.md#testing](CONTRIBUTING.md#testing), [tests/README.md](tests/README.md) |
+| Pull Requests   | [CONTRIBUTING.md#submitting-changes](CONTRIBUTING.md#submitting-changes)               |
+| Release Process | [CONTRIBUTING.md#release-process](CONTRIBUTING.md#release-process)                     |
 
 ---
 
@@ -123,7 +123,7 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 **...run tests**
 → [tests/README.md](tests/README.md)
 
-**...understand what changed in v0.1.0**
+**...understand what changed in v0.2.0**
 → [CHANGELOG.md](CHANGELOG.md) and [IMPROVEMENTS.md](IMPROVEMENTS.md)
 
 **...see if everything is implemented**
@@ -256,17 +256,17 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 
 ## 📅 Documentation Maintenance
 
-| Document | Update Frequency | Last Updated |
-|----------|------------------|--------------|
-| README.md | Every release | v0.1.0 |
-| CHANGELOG.md | Every release | v0.1.0 |
-| TROUBLESHOOTING.md | As needed | v0.1.0 |
-| CONTRIBUTING.md | Rarely | v0.1.0 |
-| man/spt.1 | Every release | v0.1.0 |
-| tests/README.md | With test changes | v0.1.0 |
+| Document           | Update Frequency  | Last Updated |
+| ------------------ | ----------------- | ------------ |
+| README.md          | Every release     | v0.2.0       |
+| CHANGELOG.md       | Every release     | v0.2.0       |
+| TROUBLESHOOTING.md | As needed         | v0.2.0       |
+| CONTRIBUTING.md    | Rarely            | v0.2.0       |
+| man/spt.1          | Every release     | v0.2.0       |
+| tests/README.md    | With test changes | v0.2.0       |
 
 ---
 
 **Last Updated:** January 15, 2026  
-**Version:** 0.1.0  
+**Version:** 0.2.0  
 **Maintainer:** Shinichi Okada

@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+
 fn_list(){
     echo "SPT Cache Directory: $DEBTEMP_DIR"
     echo ""
@@ -11,8 +14,12 @@ fn_list(){
     
     # List pre-packages
     echo "Pre-packages (staged for building):"
-    if [ -d "$PKG_DIR" ] && [ -n "$(ls -A "$PKG_DIR" 2>/dev/null)" ]; then
-        for pkg in "$PKG_DIR"/*; do
+    if [ -d "$PKG_DIR" ]; then
+        shopt -s nullglob
+        pkg_dirs=("$PKG_DIR"/*)
+        shopt -u nullglob
+        if [ ${#pkg_dirs[@]} -gt 0 ]; then
+            for pkg in "${pkg_dirs[@]}"; do
             if [ -d "$pkg" ]; then
                 PKG_NAME=$(basename "$pkg")
                 PKG_SIZE=$(du -sh "$pkg" 2>/dev/null | cut -f1)
@@ -31,7 +38,8 @@ fn_list(){
                 fi
                 echo ""
             fi
-        done
+            done
+        fi
     else
         echo "  (none)"
         echo ""
@@ -39,7 +47,8 @@ fn_list(){
     
     # List generated .deb packages
     echo "Generated Debian packages (ready to install):"
-    if [ -d "$DEB_DIR" ] && [ -n "$(ls -A "$DEB_DIR"/*.deb 2>/dev/null)" ]; then
+    if [ -d "$DEB_DIR" ] && [ -n "$(find "$DEB_DIR" -maxdepth 1 -name '*.deb' -type f 2>/dev/null)" ]; then
+
         for deb in "$DEB_DIR"/*.deb; do
             if [ -f "$deb" ]; then
                 DEB_NAME=$(basename "$deb")
@@ -73,10 +82,8 @@ fn_list(){
     fi
     
     # Show total cache size
-    if [ -d "$DEBTEMP_DIR" ]; then
-        TOTAL_SIZE=$(du -sh "$DEBTEMP_DIR" 2>/dev/null | cut -f1)
-        echo "Total cache size: $TOTAL_SIZE"
-        echo ""
-        echo "Tip: Use 'spt clean' to remove all cached files"
-    fi
+    TOTAL_SIZE=$(du -sh "$DEBTEMP_DIR" 2>/dev/null | cut -f1)
+    echo "Total cache size: $TOTAL_SIZE"
+    echo ""
+    echo "Tip: Use 'spt clean' to remove all cached files"
 }

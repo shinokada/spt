@@ -23,7 +23,6 @@ tests/tmp/
 # Backup files
 *.bak
 *.backup
-*~
 
 # Build artifacts
 *.deb

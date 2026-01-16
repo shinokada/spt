@@ -5,16 +5,18 @@ set -eu
 # shellcheck disable=SC2034
 VERSION="0.2.0"
 SCRIPT_NAME=$(basename "$0")
-REPO_VERSION=""
-REPO_USER=""
-REPO_NAME=""
-USER_NAME=""
-USER_EMAIL=""
-ARCHITECTURE=""
-DEB_NAME=""
-DEBTEMP_DIR="$HOME/.cache/spt"
-PKG_DIR="$DEBTEMP_DIR/pkg"
-DEB_DIR="$DEBTEMP_DIR/deb"
+
+# Export variables used by sourced lib files
+export REPO_VERSION=""
+export REPO_USER=""
+export REPO_NAME=""
+export USER_NAME=""
+export USER_EMAIL=""
+export ARCHITECTURE=""
+export DEB_NAME=""
+export DEBTEMP_DIR="$HOME/.cache/spt"
+export PKG_DIR="$DEBTEMP_DIR/pkg"
+export DEB_DIR="$DEBTEMP_DIR/deb"
 
 readlinkf() {
     [ "${1:-}" ] || return 1

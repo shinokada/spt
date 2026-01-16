@@ -85,7 +85,7 @@ brew install dpkg
 Try running the tests:
 
 ```bash
-cd /Users/shinichiokada/Bash/spt
+cd /path/to/spt
 
 # Make executable
 chmod +x tests/*.sh
