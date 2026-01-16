@@ -26,7 +26,7 @@ fn_install() {
         echo ""
     fi
 
-    DEB_FILE=$(echo "$DEB_FILES" | head -1)
+    DEB_FILE=$(printf '%s\n' "$DEB_FILES" | sort | head -1)
 
     if [ -z "$DEB_FILE" ]; then
         echo "Error: No .deb package found in $DEB_DIR"

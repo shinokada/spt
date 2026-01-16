@@ -131,24 +131,22 @@ test_list_empty() {
 }
 
 test_clean_empty() {
-    section "Clean Command (Empty Cache: run spt clean)"
+    section "Clean Command (Empty Cache)"
 
     # Note: spt clean shows cache info even when empty (0 items)
     # This is better UX than just saying "doesn't exist"
-    if output=$("$SPT_BIN" clean 2>&1); then
-        # Test will get "Cancelled" since we don't provide 'y' response
+    # We need to provide 'n' input to avoid hanging and to test cancellation
+    if output=$(echo "n" | "$SPT_BIN" clean 2>&1); then
+        # Should show cache info and then get cancelled
         if echo "$output" | grep -qE "(does not exist|Cancelled|0 pre-package|0 .deb)"; then
             pass "Clean handles empty cache gracefully"
         else
             fail "Clean should handle empty cache" "Got: $output"
         fi
     else
-        # Command might exit with error code if cancelled, which is okay
-        if echo "$output" | grep -qE "(does not exist|Cancelled)"; then
-            pass "Clean handles empty cache gracefully (with cancellation)"
-        else
-            fail "Clean command unexpected behavior" "Got: $output"
-        fi
+        # Command exits with 0 when cancelled, so this shouldn't happen
+        # unless there's a real error
+        fail "Clean command failed unexpectedly" "Got: $output"
     fi
 }
 

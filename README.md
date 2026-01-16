@@ -73,7 +73,7 @@ Download the latest Debian package from the [releases](https://github.com/shinok
 
 ```bash
 # Download the latest release (replace X with actual version numbers)
-wget https://github.com/shinokada/spt/releases/download/vX.X.X/spt_X.X.X-X_all.deb
+curl -LO https://github.com/shinokada/spt/releases/download/vX.X.X/spt_X.X.X-X_all.deb
 
 # Install
 sudo apt install ./spt_X.X.X-X_all.deb

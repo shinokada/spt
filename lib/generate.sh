@@ -3,7 +3,7 @@
 
 fn_generate() {
     # Check for package in PKG_DIR first (before using PKG_NAME)
-    PKG_NAME=$(find "$PKG_DIR" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | head -1 | xargs -r basename 2>/dev/null)
+    PKG_NAME=$(find "$PKG_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; 2>/dev/null | head -1)
 
     if [ -z "$PKG_NAME" ]; then
         echo "Error: No pre-package found in $PKG_DIR"

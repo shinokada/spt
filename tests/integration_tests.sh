@@ -329,10 +329,14 @@ test_open_command() {
     else
         # Should fail gracefully
         if output=$("$SPT_BIN" open 2>&1); then
-            fail "Open should fail without VSCode"
+            if [ -n "${EDITOR:-}" ]; then
+                pass "Open falls back to \$EDITOR"
+            else
+                fail "Open should not succeed without VSCode/EDITOR" "$output"
+            fi
         else
             if echo "$output" | grep -q "VSCode not found"; then
-                pass "Open fails gracefully without VSCode"
+                pass "Open fails gracefully without VSCode/EDITOR"
             else
                 fail "Open error message unclear" "$output"
             fi

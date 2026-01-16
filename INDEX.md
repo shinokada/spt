@@ -267,6 +267,6 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 
 ---
 
-**Last Updated:** January 15, 2026  
+**Last Updated:** January 16, 2026  
 **Version:** 0.2.0  
 **Maintainer:** Shinichi Okada

@@ -102,7 +102,7 @@ fn_create() {
     else
         # Fallback to grep-based parsing
         HTML=$(curl -sH "Accept: application/vnd.github.v3+json" \
-            -connect-timeout 10 --max-time 30 \
+            --connect-timeout 10 --max-time 30 \
             "https://api.github.com/repos/${REPO_USER}/${REPO_NAME}/releases/latest" 2>/dev/null | grep "tag_name") || {
             echo "Error: Could not find repository ${REPO_USER}/${REPO_NAME} or it has no releases."
             echo "Tip: Install 'jq' for better JSON parsing: sudo apt install jq"
