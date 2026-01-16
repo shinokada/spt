@@ -1,0 +1,73 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Get version from tag
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq lintian
+    
+    - name: Install GitHub CLI
+      run: |
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install -y gh
+    
+    - name: Authenticate GitHub CLI
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "$GH_TOKEN" | gh auth login --with-token
+    
+    - name: Make spt executable
+      run: chmod +x spt
+    
+    - name: Build package
+      run: |
+        ./spt create -y ${{ github.repository }}
+        ./spt generate
+    
+    - name: Get package name
+      id: pkg_name
+      run: |
+        PKG_FILE=$(ls ~/.cache/spt/deb/*.deb)
+        echo "PACKAGE=$PKG_FILE" >> $GITHUB_OUTPUT
+        echo "PKG_NAME=$(basename $PKG_FILE)" >> $GITHUB_OUTPUT
+    
+    - name: Create Release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Extract changelog for this version
+        CHANGELOG=$(sed -n "/## \[${{ steps.get_version.outputs.VERSION }}\]/,/## \[/p" CHANGELOG.md | sed '$d')
+        
+        gh release create ${{ github.ref_name }} \
+          --title "Release ${{ github.ref_name }}" \
+          --notes "$CHANGELOG" \
+          ${{ steps.pkg_name.outputs.PACKAGE }}
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: debian-package
+        path: ${{ steps.pkg_name.outputs.PACKAGE }}

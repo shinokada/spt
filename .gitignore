@@ -1,1 +1,39 @@
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Development
+*.log
+*.tmp
+.cache/
+
+# Testing
+test/
+tests/tmp/
+*.test
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Build artifacts
+*.deb
+*.buildinfo
+*.changes
+
+# Local config (if implemented)
+.sptrc
+config.local
+
+# Development packages
+pkg/
+deb/
