@@ -250,7 +250,7 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 2. **Search TROUBLESHOOTING.md** - Specific error solutions
 3. **Review examples** - See working use cases
 4. **Check man page** - Complete reference
-5. **Create an issue** - https://github.com/shinokada/spt/issues
+5. **Create an issue** - [GitHub issue](https://github.com/shinokada/spt/issues)
 
 ---
 

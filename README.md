@@ -223,7 +223,7 @@ spt install
 
 Your GitHub repository should follow this structure for SPT to work correctly:
 
-```
+```text
 your-repo/
 ├── repo-name          # Main executable script (same name as repo)
 ├── lib/              # Supporting library files (optional)
@@ -238,16 +238,16 @@ your-repo/
 - The main file will be moved to `/usr/bin`
 - Everything else goes to `/usr/share/repo-name`
 - The main script should reference libraries using:
-  ```bash
-  script_dir="/usr/share/repo-name"
-  source "$script_dir/lib/module.sh"
-  ```
+```bash
+script_dir="/usr/share/repo-name"
+source "$script_dir/lib/module.sh"
+```
 
 ## Package Structure
 
 SPT creates packages with this structure:
 
-```
+```text
 repo_1.0.0-1_all/
 ├── DEBIAN/
 │   ├── control       # Package metadata
@@ -274,7 +274,7 @@ code ~/.cache/spt/pkg/repo_1.0.0-1_all/DEBIAN/control
 
 Example control file:
 
-```
+```text
 Package: myapp
 Version: 1.0.0
 Architecture: amd64
@@ -288,7 +288,7 @@ Description: My awesome application
 
 ### Common Dependencies
 
-```
+```text
 # For bash scripts
 Depends: bash (>= 4.0)
 
@@ -306,7 +306,7 @@ Architecture: all
 
 SPT uses `~/.cache/spt/` for all temporary files:
 
-```
+```text
 ~/.cache/spt/
 ├── pkg/              # Pre-packages (editable)
 │   └── repo_1.0.0-1_all/
@@ -429,31 +429,6 @@ spt generate -o ~/packages/tool2
 
 # List all
 ls ~/packages/
-```
-
-### Integration with GitHub Actions
-
-```yaml
-name: Build Package
-on: [release]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install SPT
-        run: |
-          wget https://github.com/shinokada/spt/releases/latest/download/spt.deb
-          sudo apt install ./spt.deb
-      - name: Build package
-        run: |
-          spt create -y ${{ github.repository }}
-          spt generate -o dist/
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: debian-package
-          path: dist/*.deb
 ```
 
 ## Bash Completion

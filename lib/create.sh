@@ -1,6 +1,24 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
 
+# read_with_default PROMPT DEFAULT VAR
+read_with_default() {
+    local prompt="$1"
+    local default="$2"
+    local __var="$3"
+    local input
+
+    if ((BASH_VERSINFO[0] >= 4)); then
+        # Bash 4+: supports -i
+        read -r -e -i "$default" -p "$prompt" input
+    else
+        # Bash 3.2 (macOS default)
+        read -r -p "$prompt [$default]: " input
+    fi
+
+    printf -v "$__var" '%s' "${input:-$default}"
+}
+
 fn_create() {
     # if $1 not there exit
     if [ $# -eq 0 ]; then
@@ -68,6 +86,7 @@ fn_create() {
     if command -v jq >/dev/null 2>&1; then
         # Use jq for reliable JSON parsing
         API_RESPONSE=$(curl -sH "Accept: application/vnd.github.v3+json" \
+            --connect-timeout 10 --max-time 30 \
             "https://api.github.com/repos/${REPO_USER}/${REPO_NAME}/releases/latest" 2>/dev/null)
 
         if [ -z "$API_RESPONSE" ] || [ "$(echo "$API_RESPONSE" | jq -r '.message // empty')" = "Not Found" ]; then
@@ -83,6 +102,7 @@ fn_create() {
     else
         # Fallback to grep-based parsing
         HTML=$(curl -sH "Accept: application/vnd.github.v3+json" \
+            -connect-timeout 10 --max-time 30 \
             "https://api.github.com/repos/${REPO_USER}/${REPO_NAME}/releases/latest" 2>/dev/null | grep "tag_name") || {
             echo "Error: Could not find repository ${REPO_USER}/${REPO_NAME} or it has no releases."
             echo "Tip: Install 'jq' for better JSON parsing: sudo apt install jq"
@@ -123,21 +143,14 @@ fn_create() {
 
     # Interactive confirmations (skip if --yes flag is set)
     if [ "${YES:-0}" != 1 ]; then
-        read -r -e -i "$REPO_NAME" -p "Package name: " input
-        REPO_NAME="${input:-$REPO_NAME}"
-
-        read -r -e -i "$REPO_VERSION" -p "Version: " input
-        REPO_VERSION="${input:-$REPO_VERSION}"
+        read_with_default "Package name:" "$REPO_NAME" REPO_NAME
+        read_with_default "Version:" "$REPO_VERSION" REPO_VERSION
 
         REVISION_NUM=1
-        read -r -e -i "$REVISION_NUM" -p "Revision number: " input
-        REVISION_NUM="${input:-$REVISION_NUM}"
+        read_with_default "Revision number:" "$REVISION_NUM" REVISION_NUM
 
-        read -r -e -i "$ARCHITECTURE" -p "Architecture: " input
-        ARCHITECTURE="${input:-$ARCHITECTURE}"
-
-        read -r -e -i "$REPO_DESC" -p "Description: " input
-        REPO_DESC="${input:-$REPO_DESC}"
+        read_with_default "Architecture:" "$ARCHITECTURE" ARCHITECTURE
+        read_with_default "Description:" "$REPO_DESC" REPO_DESC
     else
         REVISION_NUM=1
         echo "Using defaults: ${REPO_NAME} ${REPO_VERSION}-${REVISION_NUM} ${ARCHITECTURE}"
@@ -177,12 +190,12 @@ EOF
 echo "Looking for old versions of ${REPO_NAME} ..."
 
 if [ -f "/usr/bin/${REPO_NAME}" ]; then
-    rm -f /usr/bin/${REPO_NAME}
+    rm -f "/usr/bin/${REPO_NAME}"
     echo "Removed old ${REPO_NAME} from /usr/bin"
 fi
 
 if [ -d "/usr/share/${REPO_NAME}" ]; then
-    rm -rf /usr/share/${REPO_NAME}
+    rm -rf "/usr/share/${REPO_NAME}"
     echo "Removed old ${REPO_NAME} from /usr/share"
 fi
 EOF

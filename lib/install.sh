@@ -13,7 +13,11 @@ fn_install() {
 
     # Find the .deb file
     DEB_FILES=$(find "$DEB_DIR" -maxdepth 1 -name "*.deb" -type f 2>/dev/null)
-    DEB_COUNT=$(echo "$DEB_FILES" | grep -c . 2>/dev/null || echo 0)
+    if [ -z "$DEB_FILES" ]; then
+        DEB_COUNT=0
+    else
+        DEB_COUNT=$(echo "$DEB_FILES" | wc -l)
+    fi
 
     if [ "$DEB_COUNT" -gt 1 ]; then
         echo "Warning: Multiple .deb packages found. Using the first one."
@@ -46,7 +50,7 @@ fn_install() {
     else
         PACKAGE_NAME=""
     fi
-    
+
     if [ -n "$PACKAGE_NAME" ]; then
         if dpkg -l "$PACKAGE_NAME" 2>/dev/null | grep -q "^ii"; then
             INSTALLED_VERSION=$(dpkg -l "$PACKAGE_NAME" | grep "^ii" | awk '{print $3}')

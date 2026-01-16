@@ -3,7 +3,7 @@
 
 fn_generate() {
     # Check for package in PKG_DIR first (before using PKG_NAME)
-    PKG_NAME=$(find "$PKG_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" 2>/dev/null | head -1)
+    PKG_NAME=$(find "$PKG_DIR" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | head -1 | xargs -r basename 2>/dev/null)
 
     if [ -z "$PKG_NAME" ]; then
         echo "Error: No pre-package found in $PKG_DIR"
@@ -11,10 +11,8 @@ fn_generate() {
         exit 1
     fi
 
-    PKG_PATH="$PKG_DIR/$PKG_NAME"
-
-    # Use custom output dir if specified
     OUTPUT_DIR="${OUTPUT:-$DEB_DIR}"
+    PKG_PATH="$PKG_DIR/$PKG_NAME"
     OUTPUT_PATH="$OUTPUT_DIR/${PKG_NAME}.deb"
 
     # Remove only the target output file if it exists
@@ -25,6 +23,9 @@ fn_generate() {
             exit 1
         }
     fi
+
+    # Use custom output dir if specified
+    OUTPUT_DIR="${OUTPUT:-$DEB_DIR}"
 
     # Create output directory
     echo "Creating output directory ..."

@@ -48,7 +48,7 @@ fail() {
 
 skip() {
     echo -e "${YELLOW}⊘${NC} $1 (skipped: $2)"
-    ((TESTS_RUN++))
+    ((++TESTS_RUN))
 }
 
 section() {
@@ -307,7 +307,7 @@ test_generate_custom_output() {
     mkdir -p "$CUSTOM_OUT"
 
     if output=$("$SPT_BIN" generate -o "$CUSTOM_OUT" 2>&1); then
-        if [ -f "$CUSTOM_OUT"/*.deb ]; then
+        if find "$CUSTOM_OUT" -maxdepth 1 -name "*.deb" -type f 2>/dev/null | grep -q .; then
             pass "Custom output directory works"
         else
             fail "No .deb in custom output" "$output"

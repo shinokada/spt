@@ -229,9 +229,9 @@ brew install dpkg
 Tests will skip dpkg-dependent operations if dpkg is not available.
 
 ### Integration tests fail
-Make sure you're on Linux and authenticated:
+Make sure you have dpkg installed and are authenticated:
 ```bash
-uname  # Should show "Linux"
+which dpkg-deb  # Should show path to dpkg-deb
 gh auth status  # Should show "Logged in"
 ```
 
