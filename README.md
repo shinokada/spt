@@ -41,8 +41,17 @@ A streamlined command-line tool for creating Debian packages from GitHub reposit
 # Debian/Ubuntu
 sudo apt install curl dpkg git jq lintian
 
-# Install GitHub CLI (see https://github.com/cli/cli#installation)
-# Then authenticate
+# macOS (note: gh is already included above)
+brew install curl dpkg git jq gh
+
+# Install GitHub CLI on Debian/Ubuntu
+# See: https://github.com/cli/cli#installation
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+sudo apt update
+sudo apt install gh
+
+# Authenticate with GitHub (both platforms)
 gh auth login
 ```
 
