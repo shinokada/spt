@@ -6,73 +6,52 @@
 
 A streamlined command-line tool for creating Debian packages from GitHub repositories.
 
-## Overview
-
-SPT automates the process of creating basic Debian packages from GitHub repositories. It handles cloning, package structure creation, and .deb generation with sensible defaults and interactive confirmations.
-
-[Read more about creating Debian packages](https://betterprogramming.pub/how-to-create-a-basic-debian-package-927be001ad80)
+[Read more about Debian packaging](https://betterprogramming.pub/how-to-create-a-basic-debian-package-927be001ad80)
 
 ## Features
 
-- 🚀 **One-command package creation** from GitHub repos
-- 🔍 **Automatic version detection** from GitHub releases
-- 🏗️ **Smart architecture detection** (falls back to "all")
-- 📦 **Pre-package editing** support with VSCode integration
-- ✅ **Package validation** with lintian (if installed)
-- 🔄 **HTTPS/SSH fallback** for repository cloning
-- 📊 **Cache management** with list and clean commands
-- 🎯 **Dry-run mode** for safe testing
-- 💡 **Interactive and automated** modes (--yes flag)
-- 🧪 **Automated test suite** with CI/CD integration
-- ⌨️ **Bash completion** for commands and flags
-- 📖 **Man pages** for comprehensive documentation
+- 🚀 One-command package creation from GitHub repos
+- 🔍 Automatic version detection from releases
+- 🏗️ Smart architecture detection
+- 📦 VSCode integration for editing
+- ✅ Package validation with lintian
+- 🔄 HTTPS/SSH fallback for cloning
+- 📊 Cache management (list/clean)
+- 🎯 Dry-run mode for testing
+- 💡 Interactive and automated modes
+- ⌨️ Bash completion support
 
 ## Requirements
 
 ### Essential
-- **Linux/Debian** - Primary platform for full functionality
-- **macOS** - Supported for development and pre-package creation
-  - Install `dpkg` via Homebrew to generate .deb files: `brew install dpkg`
-  - Or use [macgnu](https://github.com/shinokada/macgnu) for GNU tools
-- **curl** - For API calls
-- **dpkg** - For package building
-  - Linux: Usually pre-installed
-  - macOS: `brew install dpkg`
-- **git** - For cloning repositories
-- **GitHub CLI (gh)** - For GitHub authentication
+- **Linux/Debian** or **macOS** (with Homebrew)
+- **curl** - API calls
+- **dpkg** - Package building (`brew install dpkg` on macOS)
+- **git** - Repository cloning
+- **GitHub CLI (gh)** - Authentication ([installation](https://github.com/cli/cli#installation))
 
 ### Recommended
-- **jq** - For reliable JSON parsing (`sudo apt install jq`)
-- **lintian** - For package validation (`sudo apt install lintian`)
-- **VSCode** - For editing packages (`code` command)
-- **shellcheck** - For development and testing (`sudo apt install shellcheck`)
+- **jq** - Better JSON parsing
+- **lintian** - Package validation
+- **VSCode** - Package editing
 
-### Installation of requirements
+### Quick Setup
 
 ```bash
-# Install essential tools
-sudo apt install curl dpkg git
+# Debian/Ubuntu
+sudo apt install curl dpkg git jq lintian
 
-# Install GitHub CLI
-# See: https://github.com/cli/cli#installation
-curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-sudo apt update
-sudo apt install gh
-
-# Authenticate with GitHub
+# Install GitHub CLI (see https://github.com/cli/cli#installation)
+# Then authenticate
 gh auth login
-
-# Install recommended tools
-sudo apt install jq lintian
 ```
 
 ## Installation
 
-Download the latest Debian package from the [releases](https://github.com/shinokada/spt/releases) page.
+Download from [releases](https://github.com/shinokada/spt/releases):
 
 ```bash
-# Download the latest release (replace X with actual version numbers)
+# Download latest (replace X.X.X with version)
 curl -LO https://github.com/shinokada/spt/releases/download/vX.X.X/spt_X.X.X-X_all.deb
 
 # Install
@@ -82,151 +61,117 @@ sudo apt install ./spt_X.X.X-X_all.deb
 ## Quick Start
 
 ```bash
-# Create a package
+# Create package from GitHub repo
 spt create username/repo
 
-# Generate the .deb file
+# Edit dependencies (optional)
+spt open  # Opens in VSCode
+# Edit DEBIAN/control to add: Depends: bash (>= 4.0), curl
+
+# Generate .deb file
 spt generate
 
-# Install locally
+# Test locally
 spt install
 ```
 
-## Usage
+## Commands
 
-### Commands
+### `spt create [options] username/repo`
 
-#### `spt create`
 Creates a pre-package from a GitHub repository.
 
+**Options:**
+- `-c, --code` - Open in VSCode after creation
+- `-y, --yes` - Skip interactive prompts
+- `-h, --help` - Show help
+
+**Example:**
 ```bash
-# Basic usage
 spt create shinokada/teffects
-
-# Skip interactive prompts
-spt create -y username/repo
-
-# Create and open in VSCode
-spt create -c username/repo
+spt create -cy username/repo  # Non-interactive + open in VSCode
 ```
 
-**What it does:**
-1. Validates system requirements
-2. Fetches repository information from GitHub
-3. Auto-detects version from latest release
-4. Clones repository (HTTPS with SSH fallback)
-5. Creates Debian package structure
-6. Generates control files
+### `spt generate [options]`
 
-#### `spt generate`
 Generates a .deb package from the pre-package.
 
+**Options:**
+- `-d, --dry-run` - Preview without building
+- `-o, --output DIR` - Custom output directory
+- `-h, --help` - Show help
+
+**Example:**
 ```bash
-# Generate package
 spt generate
-
-# Dry run (preview without building)
-spt generate --dry-run
-
-# Custom output directory
-spt generate -o /tmp/packages
+spt generate --dry-run  # Test first
+spt generate -o /tmp/packages  # Custom location
 ```
 
-**What it does:**
-1. Validates package structure
-2. Checks for common issues (.git directory)
-3. Builds .deb package with dpkg-deb
-4. Runs lintian validation (if available)
-5. Shows package information
+### `spt install`
 
-#### `spt install`
 Installs the generated .deb package locally.
 
 ```bash
 spt install
 ```
 
-**What it does:**
-1. Finds the .deb package in cache
-2. Shows package information
-3. Checks if already installed
-4. Installs with apt (handles dependencies)
+### `spt open`
 
-#### `spt list`
-Lists all cached packages.
-
-```bash
-spt list
-```
-
-**Shows:**
-- Pre-packages (staged)
-- Generated .deb packages
-- Package metadata (version, arch, size)
-- Installation status
-- Total cache size
-
-#### `spt clean`
-Cleans the cache directory.
-
-```bash
-# Interactive clean
-spt clean
-
-# Force clean without confirmation
-spt clean -f
-```
-
-#### `spt open`
-Opens the pre-package directory in an editor.
+Opens the pre-package in VSCode (or $EDITOR).
 
 ```bash
 spt open
 ```
 
-**What it does:**
-1. Finds the first pre-package in the cache
-2. Opens it in VSCode if code is available
-3. Falls back to $EDITOR if VSCode is not installed
+### `spt list`
 
-**Notes:**
-- Requires an existing pre-package (run spt create first)
-- Some files may be owned by root, so editor permission prompts may appear
+Lists all cached packages (pre-packages and .deb files).
 
-### Workflow
+```bash
+spt list
+```
+
+### `spt clean [options]`
+
+Cleans the cache directory.
+
+**Options:**
+- `-f, --force` - Skip confirmation
+
+```bash
+spt clean
+spt clean -f  # Force clean
+```
+
+## Workflow
 
 ```bash
 # 1. Create pre-package
 spt create username/repo
 
-# 2. (Optional) Edit the package
-code ~/.cache/spt/pkg/repo_1.0.0-1_all
+# 2. Edit dependencies (DEBIAN/control)
+spt open
+# Add: Depends: bash (>= 4.0), curl, jq
 
-# 3. Update dependencies in DEBIAN/control
-# Edit: ~/.cache/spt/pkg/repo_1.0.0-1_all/DEBIAN/control
-
-# 4. Generate .deb package
+# 3. Generate .deb
 spt generate
 
-# 5. Test locally
+# 4. Test locally
 spt install
 
-# 6. Upload to GitHub releases
-# Use gh CLI or web interface
-
-# 7. Users can install from release
-# wget <release-url>/package.deb
-# sudo apt install ./package.deb
+# 5. Distribute via GitHub releases
+gh release create v1.0.0 ~/.cache/spt/deb/*.deb
 ```
 
-## Repository Structure Requirements
+## Repository Structure
 
-Your GitHub repository should follow this structure for SPT to work correctly:
+Your GitHub repository should be structured like this:
 
 ```text
 your-repo/
-├── repo-name          # Main executable script (same name as repo)
-├── lib/              # Supporting library files (optional)
+├── repo-name          # Main executable (same name as repo)
+├── lib/              # Supporting files (optional)
 │   ├── module1.sh
 │   └── module2.sh
 ├── README.md
@@ -234,281 +179,170 @@ your-repo/
 ```
 
 **Important:**
-- The main executable should match the repository name
-- The main file will be moved to `/usr/bin`
-- Everything else goes to `/usr/share/repo-name`
-- The main script should reference libraries using:
+- Main executable must match repository name
+- It will be installed to `/usr/bin/`
+- Supporting files go to `/usr/share/repo-name/`
+- Update script paths to reference `/usr/share/repo-name/`:
+
 ```bash
+# In your main script
 script_dir="/usr/share/repo-name"
 source "$script_dir/lib/module.sh"
 ```
 
 ## Package Structure
 
-SPT creates packages with this structure:
-
-```text
-repo_1.0.0-1_all/
-├── DEBIAN/
-│   ├── control       # Package metadata
-│   └── preinst       # Pre-installation script
-├── usr/
-│   ├── bin/
-│   │   └── repo      # Main executable
-│   └── share/
-│       └── repo/     # Supporting files
-│           ├── lib/
-│           └── ...
-```
-
-## Customization
-
-### Editing Control File
-
-After running `spt create`, edit the control file to add dependencies:
-
-```bash
-# Open in VSCode
-code ~/.cache/spt/pkg/repo_1.0.0-1_all/DEBIAN/control
-```
-
-Example control file:
-
-```text
-Package: myapp
-Version: 1.0.0
-Architecture: amd64
-Maintainer: Your Name <your@email.com>
-Depends: bash (>= 4.0), curl, jq
-Homepage: https://github.com/username/myapp
-Description: My awesome application
- A longer description can go here.
- Multiple lines are supported.
-```
-
-### Common Dependencies
-
-```text
-# For bash scripts
-Depends: bash (>= 4.0)
-
-# With external tools
-Depends: bash (>= 4.0), curl, jq, git
-
-# For specific architecture
-Architecture: amd64
-
-# For all architectures
-Architecture: all
-```
-
-## Cache Location
-
-SPT uses `~/.cache/spt/` for all temporary files:
+SPT creates this structure:
 
 ```text
 ~/.cache/spt/
 ├── pkg/              # Pre-packages (editable)
 │   └── repo_1.0.0-1_all/
+│       ├── DEBIAN/
+│       │   ├── control
+│       │   └── preinst
+│       └── usr/
+│           ├── bin/repo
+│           └── share/repo/
 └── deb/              # Generated .deb files
     └── repo_1.0.0-1_all.deb
+```
+
+## Customizing Packages
+
+### Adding Dependencies
+
+Edit `DEBIAN/control` after running `spt create`:
+
+```text
+Package: myapp
+Version: 1.0.0
+Architecture: all
+Maintainer: Your Name <your@email.com>
+Depends: bash (>= 4.0), curl, jq
+Homepage: https://github.com/username/myapp
+Description: Short description
+ Longer description here.
+ Multiple lines supported.
+```
+
+### Common Dependencies
+
+```text
+Depends: bash (>= 4.0)                    # For bash scripts
+Depends: bash (>= 4.0), curl, jq, git    # With external tools
 ```
 
 ## Troubleshooting
 
 ### "Could not find repository or it has no releases"
-
-**Solution:** Ensure the repository:
-1. Exists and is public (or you're authenticated)
-2. Has at least one release with a version tag
-3. Release tag follows semantic versioning (e.g., v1.0.0 or 1.0.0)
+- Ensure repository has at least one release with a version tag (v1.0.0 or 1.0.0)
+- Check repository is public or you're authenticated with `gh auth status`
 
 ### "Unable to clone repository"
-
-**Solutions:**
 - Run `gh auth login` to authenticate
-- Check if repository is accessible
-- Verify SSH keys are set up (if using SSH)
+- Verify repository exists and is accessible
 
 ### "Missing DEBIAN/control file"
-
-**Solution:** The pre-package is corrupted. Run:
 ```bash
 spt clean
 spt create username/repo
 ```
 
 ### Package fails lintian checks
-
-**Common issues:**
-- Missing dependencies in control file
-- Incorrect permissions on files
-- Missing documentation files
-
-**Fix:** Edit the pre-package before generating:
-```bash
-code ~/.cache/spt/pkg/your-package/
-spt generate
-```
-
-### "Not able to create a dir" errors
-
-**Solution:** Check disk space and permissions:
-```bash
-df -h ~
-ls -la ~/.cache/
-```
-
-## Examples
-
-### Creating a package with all features
-
-```bash
-# Create with VSCode integration
-spt create -c username/awesome-tool
-
-# Edit dependencies
-# (VSCode opens automatically)
-# Edit DEBIAN/control, add:
-# Depends: bash (>= 4.0), curl, jq
-
-# Preview before building
-spt generate --dry-run
-
-# Build the package
-spt generate
-
-# Test installation
-spt install
-
-# List everything
-spt list
-
-# Clean up when done
-spt clean -f
-```
-
-### Non-interactive automation
-
-```bash
-# Perfect for CI/CD
-spt create -y username/repo
-spt generate
-```
-
-### Custom output directory
-
-```bash
-# Generate to specific location
-spt generate -o /tmp/releases
-
-# Package is now in /tmp/releases/
-ls /tmp/releases/
-```
-
-## Tips
-
-1. **Use jq** - Install jq for better error messages and reliability
-2. **Test locally first** - Always use `spt install` before distributing
-3. **Version your releases** - Use semantic versioning (v1.0.0, v1.0.1, etc.)
-4. **Document dependencies** - Keep control file up to date
-5. **Check lintian** - Fix warnings before distribution
-6. **Clean regularly** - Use `spt clean` to free up space
-
-## Advanced Usage
-
-### Multiple packages
-
-```bash
-# Create several packages
-spt create user/tool1
-spt generate -o ~/packages/tool1
-
-spt create user/tool2  
-spt generate -o ~/packages/tool2
-
-# List all
-ls ~/packages/
-```
+- Edit pre-package: `spt open`
+- Add missing dependencies to `DEBIAN/control`
+- Check file permissions are correct
 
 ## Bash Completion
 
-SPT includes bash completion for commands and flags.
+Install completion support:
 
-### Installation
-
-**System-wide:**
 ```bash
+# System-wide
 sudo cp completions/spt-completion.bash /etc/bash_completion.d/spt
-source ~/.bashrc
-```
 
-**User-only:**
-```bash
+# User-only
 mkdir -p ~/.local/share/bash-completion/completions
 cp completions/spt-completion.bash ~/.local/share/bash-completion/completions/spt
+
+# Reload shell
 source ~/.bashrc
 ```
 
-### Usage
-
-After installation, use Tab to autocomplete:
+Usage:
 ```bash
-spt <TAB>              # Shows: create generate install list clean open
-spt create <TAB>       # Shows: -c --code -y --yes -h --help
-spt generate -<TAB>    # Shows: -d --dry-run -o --output -h --help
+spt <TAB>              # Shows commands
+spt create -<TAB>      # Shows flags
 ```
 
 ## Man Pages
 
-SPT includes comprehensive man pages.
-
-### Installation
-
 ```bash
-# System-wide
+# Install
 sudo cp man/spt.1 /usr/share/man/man1/
 sudo mandb
 
 # View
 man spt
-```
 
-### Viewing Without Installation
-
-```bash
-# View directly
+# Or view without installing
 man ./man/spt.1
-
-# Or convert to text
-man -l man/spt.1 | col -b > spt-manual.txt
 ```
 
 ## Testing
 
-SPT includes automated test suites.
-
-### Run Unit Tests
-
 ```bash
-chmod +x tests/run_tests.sh
+# Run unit tests
 ./tests/run_tests.sh
-```
 
-### Run Integration Tests
-
-```bash
-chmod +x tests/integration_tests.sh
+# Run integration tests
 ./tests/integration_tests.sh
 ```
 
-See `tests/README.md` for detailed testing documentation.
+See `tests/README.md` for details.
+
+## Tips
+
+1. Install `jq` for better error messages and reliability
+2. Always test with `spt install` before distributing
+3. Use semantic versioning for releases (v1.0.0, v1.0.1, etc.)
+4. Run `spt generate --dry-run` to preview before building
+5. Clean cache regularly with `spt clean`
+
+## Examples
+
+### Complete workflow
+```bash
+# Create and open in VSCode
+spt create -c username/awesome-tool
+
+# Edit DEBIAN/control, add dependencies
+# Depends: bash (>= 4.0), curl, jq
+
+# Preview
+spt generate --dry-run
+
+# Build
+spt generate
+
+# Test
+spt install
+
+# List packages
+spt list
+```
+
+### CI/CD automation
+```bash
+# Non-interactive mode
+spt create -y username/repo
+spt generate -o ./dist
+```
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit issues or pull requests.
-
-See `CONTRIBUTING.md` for detailed guidelines.
+Contributions welcome! See `CONTRIBUTING.md` for guidelines.
 
 ## Author
 
@@ -516,23 +350,20 @@ Shinichi Okada
 
 ## License
 
-Please see LICENSE file.
+See LICENSE file.
 
 ## Changelog
 
 ### v0.2.0
 - Added `list` and `clean` commands
 - Added `--yes` flag for non-interactive mode
-- Added `--dry-run` for generate command
-- Added `--output` option for custom output directory
+- Added `--dry-run` and `--output` options
 - Improved error messages and validation
-- Added HTTPS/SSH fallback for git clone
+- Added HTTPS/SSH fallback for cloning
 - Added automatic architecture detection
-- Added lintian integration
-- Improved package information display
+- Enhanced lintian integration
 - Better JSON parsing with jq support
 - Removed unnecessary sudo requirements
-- Enhanced documentation
 
 ### v0.0.9
 - Initial release
