@@ -1,0 +1,55 @@
+# SPT Configuration File (Future Feature)
+# Place this file at: ~/.config/spt/config
+# or: ~/.sptrc
+
+# Note: This is a template for future implementation
+# Currently, SPT does not read configuration files
+
+# Default values for package creation
+DEFAULT_ARCHITECTURE="all"          # all, amd64, arm64, etc.
+DEFAULT_REVISION="1"                 # Initial revision number
+SKIP_CONFIRMATIONS=false             # Auto-confirm prompts (--yes)
+AUTO_OPEN_VSCODE=false              # Auto-open in VSCode (--code)
+
+# Cache configuration
+CACHE_DIR="$HOME/.cache/spt"        # Cache location
+AUTO_CLEAN_OLD_PACKAGES=false       # Auto-clean old packages
+MAX_CACHE_SIZE_MB=1000              # Maximum cache size
+
+# Generation options
+DEFAULT_OUTPUT_DIR=""               # Custom output directory
+RUN_LINTIAN=true                    # Run lintian checks
+REMOVE_GIT_DIR=true                 # Auto-remove .git directories
+DRY_RUN_BY_DEFAULT=false           # Default to dry-run mode
+
+# Git configuration overrides
+# (Leave empty to use git config)
+MAINTAINER_NAME=""                  # Override git user.name
+MAINTAINER_EMAIL=""                 # Override git user.email
+
+# GitHub configuration
+GITHUB_API_TOKEN=""                 # For higher API rate limits
+PREFER_SSH_CLONE=false              # Prefer SSH over HTTPS
+
+# Package defaults
+DEFAULT_DEPENDS=""                  # e.g., "bash (>= 4.0), curl"
+DEFAULT_SECTION="utils"             # Package section
+DEFAULT_PRIORITY="optional"         # Package priority
+
+# Logging
+VERBOSE=false                       # Enable verbose output
+LOG_FILE=""                         # Log to file (empty = no logging)
+DEBUG=false                         # Enable debug output
+
+# Paths
+VSCODE_PATH="code"                  # Path to VSCode executable
+EDITOR="vim"                        # Fallback editor
+
+# Example custom templates
+# TEMPLATE_DIR="$HOME/.config/spt/templates"
+
+# Example: Package-specific overrides
+# [package:my-app]
+# ARCHITECTURE="amd64"
+# DEPENDS="bash (>= 5.0), curl, jq"
+# AUTO_OPEN_VSCODE=true

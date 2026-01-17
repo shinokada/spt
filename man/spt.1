@@ -1,0 +1,301 @@
+.TH SPT 1 "January 2026" "SPT 0.2.0" "User Commands"
+.SH NAME
+spt \- Simple Package Tool for creating Debian packages from GitHub repositories
+.SH SYNOPSIS
+.B spt
+[\fIOPTIONS\fR] \fICOMMAND\fR [\fICOMMAND-OPTIONS\fR] [\fIARGS\fR]
+.SH DESCRIPTION
+.B spt
+is a command-line tool that automates the creation of Debian packages from GitHub repositories. It handles cloning, package structure creation, and .deb generation with sensible defaults.
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Display help information
+.TP
+.BR \-v ", " \-\-version
+Display version information
+.SH COMMANDS
+.TP
+.B create
+Create a pre-package from a GitHub repository
+.TP
+.B generate
+Generate a .deb package from a pre-package
+.TP
+.B install
+Install the generated .deb package locally
+.TP
+.B list
+List all cached packages
+.TP
+.B clean
+Clean the cache directory
+.TP
+.B open
+Open the pre-package in VSCode
+.SH CREATE COMMAND
+.B spt create
+[\fIOPTIONS\fR] \fIusername/repository\fR
+.PP
+Creates a pre-package from a GitHub repository.
+.SS Options
+.TP
+.BR \-c ", " \-\-code
+Open the created pre-package in VSCode
+.TP
+.BR \-y ", " \-\-yes
+Skip all confirmation prompts (use defaults)
+.TP
+.BR \-h ", " \-\-help
+Display help for the create command
+.SS Examples
+.PP
+Create a package interactively:
+.RS
+.B spt create shinokada/teffects
+.RE
+.PP
+Create with defaults and open in VSCode:
+.RS
+.B spt create -yc shinokada/teffects
+.RE
+.SH GENERATE COMMAND
+.B spt generate
+[\fIOPTIONS\fR]
+.PP
+Generates a .deb package from the pre-package.
+.SS Options
+.TP
+.BR \-d ", " \-\-dry-run
+Preview the package without building it
+.TP
+.BR \-o ", " \-\-output " " \fIDIRECTORY\fR
+Specify a custom output directory for the .deb file
+.TP
+.BR \-h ", " \-\-help
+Display help for the generate command
+.SS Examples
+.PP
+Generate the package:
+.RS
+.B spt generate
+.RE
+.PP
+Preview without building:
+.RS
+.B spt generate --dry-run
+.RE
+.PP
+Generate to custom directory:
+.RS
+.B spt generate -o /tmp/packages
+.RE
+.SH INSTALL COMMAND
+.B spt install
+[\fIOPTIONS\fR]
+.PP
+Installs the generated .deb package locally using apt.
+.SS Options
+.TP
+.BR \-h ", " \-\-help
+Display help for the install command
+.SS Examples
+.PP
+Install the package:
+.RS
+.B spt install
+.RE
+.SH LIST COMMAND
+.B spt list
+[\fIOPTIONS\fR]
+.PP
+Lists all cached pre-packages and .deb files with metadata.
+.SS Options
+.TP
+.BR \-h ", " \-\-help
+Display help for the list command
+.SS Examples
+.PP
+List all packages:
+.RS
+.B spt list
+.RE
+.SH CLEAN COMMAND
+.B spt clean
+[\fIOPTIONS\fR]
+.PP
+Cleans the cache directory, removing all pre-packages and .deb files.
+.SS Options
+.TP
+.BR \-f ", " \-\-force
+Skip confirmation prompt
+.TP
+.BR \-h ", " \-\-help
+Display help for the clean command
+.SS Examples
+.PP
+Clean interactively:
+.RS
+.B spt clean
+.RE
+.PP
+Force clean without confirmation:
+.RS
+.B spt clean -f
+.RE
+.SH OPEN COMMAND
+.B spt open
+[\fIOPTIONS\fR]
+.PP
+Opens the pre-package directory in VSCode for editing.
+.SS Options
+.TP
+.BR \-h ", " \-\-help
+Display help for the open command
+.SS Examples
+.PP
+Open the package:
+.RS
+.B spt open
+.RE
+.SH FILES
+.TP
+.I ~/.cache/spt/
+Cache directory for all SPT operations
+.TP
+.I ~/.cache/spt/pkg/
+Pre-package directory (editable packages)
+.TP
+.I ~/.cache/spt/deb/
+Generated .deb files
+.SH WORKFLOW
+A typical workflow with spt:
+.PP
+1. Create a pre-package:
+.RS
+.B spt create username/repo
+.RE
+.PP
+2. Edit the package (optional):
+.RS
+.B spt open
+.RE
+.PP
+3. Update dependencies in DEBIAN/control
+.PP
+4. Generate the .deb package:
+.RS
+.B spt generate
+.RE
+.PP
+5. Test locally:
+.RS
+.B spt install
+.RE
+.PP
+6. Upload to GitHub releases
+.SH REQUIREMENTS
+.SS Essential
+.TP
+.B Linux/Debian
+Must run on a Debian-based system
+.TP
+.B curl
+For GitHub API calls
+.TP
+.B dpkg
+For package building (usually pre-installed)
+.TP
+.B git
+For cloning repositories
+.TP
+.B gh
+GitHub CLI for authentication
+.SS Recommended
+.TP
+.B jq
+For reliable JSON parsing
+.TP
+.B lintian
+For package validation
+.TP
+.B code
+VSCode for editing packages
+.SH REPOSITORY STRUCTURE
+Your GitHub repository should follow this structure:
+.PP
+.nf
+.RS
+your-repo/
+├── repo-name          # Main executable (same name as repo)
+├── lib/              # Supporting files (optional)
+│   └── module.sh
+├── README.md
+└── LICENSE
+.RE
+.fi
+.PP
+The main executable should reference libraries using:
+.PP
+.nf
+.RS
+script_dir="/usr/share/repo-name"
+source "$script_dir/lib/module.sh"
+.RE
+.fi
+.SH ENVIRONMENT
+.TP
+.B DEBTEMP_DIR
+Override the cache directory location (default: ~/.cache/spt)
+.SH EXIT STATUS
+.TP
+.B 0
+Success
+.TP
+.B 1
+General error
+.SH EXAMPLES
+.PP
+Complete workflow:
+.RS
+.nf
+# Create with defaults
+spt create -y username/awesome-tool
+
+# Preview before building
+spt generate --dry-run
+
+# Build the package
+spt generate
+
+# Test installation
+spt install
+
+# List everything
+spt list
+
+# Clean up
+spt clean -f
+.fi
+.RE
+.PP
+Non-interactive automation (CI/CD):
+.RS
+.nf
+spt create -y username/repo
+spt generate -o dist/
+.fi
+.RE
+.SH BUGS
+Report bugs at: https://github.com/shinokada/spt/issues
+.SH AUTHOR
+Written by Shinichi Okada.
+.SH COPYRIGHT
+See LICENSE file in the source distribution.
+.SH SEE ALSO
+.BR dpkg (1),
+.BR dpkg-deb (1),
+.BR gh (1),
+.BR apt (8)
+.PP
+Full documentation: https://github.com/shinokada/spt

@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Get version from tag
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq lintian gh
+
+    - name: Authenticate GitHub CLI
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "$GH_TOKEN" | gh auth login --with-token
+    
+    - name: Make spt executable
+      run: chmod +x spt
+    
+    - name: Build package
+      run: |
+        ./spt create -y ${{ github.repository }}
+        ./spt generate
+    
+    - name: Get package name
+      id: pkg_name
+      run: |
+        PKG_FILE=$(ls -t ~/.cache/spt/deb/*.deb 2>/dev/null | head -n1)
+        if [ -z "$PKG_FILE" ]; then
+          echo "Error: No .deb package found in ~/.cache/spt/deb/"
+          exit 1
+        fi
+        echo "PACKAGE=$PKG_FILE" >> $GITHUB_OUTPUT
+        echo "PKG_NAME=$(basename "$PKG_FILE")" >> $GITHUB_OUTPUT
+    
+    - name: Create Release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Extract changelog for this version
+        CHANGELOG=$(sed -n "/## \[${{ steps.get_version.outputs.VERSION }}\]/,/## \[/p" CHANGELOG.md | sed '$d')
+
+        if [ -z "$CHANGELOG" ]; then
+          CHANGELOG="Release ${{ github.ref_name }}"
+        fi
+        
+        gh release create ${{ github.ref_name }} \
+          --title "Release ${{ github.ref_name }}" \
+          --notes "${CHANGELOG}" \
+          ${{ steps.pkg_name.outputs.PACKAGE }}
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: debian-package
+        path: ${{ steps.pkg_name.outputs.PACKAGE }}

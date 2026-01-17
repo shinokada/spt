@@ -3,19 +3,24 @@
 set -eu
 
 # shellcheck disable=SC2034
-VERSION="0.0.9"
+VERSION="0.2.0"
 SCRIPT_NAME=$(basename "$0")
-REPO_VERSION=""
-REPO_USER=""
-REPO_NAME=""
-USER_NAME=""
-USER_EMAIL=""
-ARCHITECTURE="all"
-DEB_NAME=""
-DEBTEMP_DIR="$HOME/.cache/spt"
-PKG_DIR="$DEBTEMP_DIR/pkg"
-DEB_DIR="$DEBTEMP_DIR/deb"
 
+# Export variables used by sourced lib files
+export REPO_VERSION=""
+export REPO_USER=""
+export REPO_NAME=""
+export USER_NAME=""
+export USER_EMAIL=""
+export ARCHITECTURE=""
+export DEB_NAME=""
+# Use environment variables if set (for testing), otherwise use defaults
+: "${DEBTEMP_DIR:=$HOME/.cache/spt}"
+export DEBTEMP_DIR
+: "${PKG_DIR:=$DEBTEMP_DIR/pkg}"
+export PKG_DIR
+: "${DEB_DIR:=$DEBTEMP_DIR/deb}"
+export DEB_DIR
 
 readlinkf() {
     [ "${1:-}" ] || return 1
@@ -65,19 +70,22 @@ parser_definition() {
     disp VERSION --version
 
     msg -- '' 'Commands: '
-    msg -- 'Usee command -h for a command help.'
+    msg -- 'Use command -h for a command help.'
     cmd create -- "Creates a pre-package"
-    cmd open -- "Open the pre-package with VSCode."
-    cmd generate -- "Generate a Debian package."
-    cmd install -- "Install the local Debian package."
+    cmd open -- "Open the pre-package with VSCode"
+    cmd generate -- "Generate a Debian package"
+    cmd install -- "Install the local Debian package"
+    cmd list -- "List cached packages"
+    cmd clean -- "Clean the cache directory"
 
     msg -- '' "Examples:
-
 
 Display the version:
     $SCRIPT_NAME --version
 Display help:
     $SCRIPT_NAME -h | --help
+Create a package:
+    $SCRIPT_NAME create username/repo
 "
 }
 
@@ -85,38 +93,98 @@ eval "$(getoptions parser_definition parse "$0") exit 1"
 parse "$@"
 eval "set -- $REST"
 
-parser_definition_create(){
+parser_definition_create() {
     setup REST plus:true help:usage abbr:true -- \
         "Usage: ${2##*/} create [options...] [arguments...]" ''
 
     msg -- 'Creates a pre-debian package.'
-    # msg -- 'All parameters accepts --param value and --param=value form.' ''
 
-    # msg label:"OPTIONS" -- "DESCRIPTION"
-    flag CODE -c --code -- "Open the created pre-debian package with VSCode."
+    flag CODE -c --code -- "Open the created pre-debian package with VSCode"
+    flag YES -y --yes -- "Skip confirmation prompts"
     disp :usage -h --help
+
+    msg -- '' "Examples:
+Create a package:
+    ${2##*/} create username/repo
+Create and open in VSCode:
+    ${2##*/} create -c username/repo
+Skip confirmations:
+    ${2##*/} create -y username/repo
+"
 }
 
-parser_definition_generate(){
+parser_definition_generate() {
     setup REST plus:true help:usage abbr:true -- \
         "Usage: ${2##*/} generate [options...] [arguments...]" ''
 
     msg -- 'Generate a debian package.'
-    # msg -- 'All parameters accepts --param value and --param=value form.' ''
 
-    # msg label:"OPTIONS" -- "DESCRIPTION"
+    flag DRYRUN -d --dry-run -- "Show what would be done without doing it"
+    param OUTPUT -o --output -- "Output directory for .deb file (default: $DEB_DIR)"
     disp :usage -h --help
+
+    msg -- '' "Examples:
+Generate package:
+    ${2##*/} generate
+Dry run:
+    ${2##*/} generate --dry-run
+Custom output:
+    ${2##*/} generate -o /tmp/packages
+"
 }
 
-parser_definition_install(){
+parser_definition_open() {
+    setup REST plus:true help:usage abbr:true -- \
+        "Usage: ${2##*/} open [options...]" ''
+
+    msg -- 'Open the pre-package with VSCode.'
+
+    disp :usage -h --help
+
+    msg -- '' "Examples:
+Open pre-package:
+    ${2##*/} open
+"
+}
+
+parser_definition_install() {
     setup REST plus:true help:usage abbr:true -- \
         "Usage: ${2##*/} install [options...] [arguments...]" ''
 
     msg -- 'Install the local debian package.'
-    # msg -- 'All parameters accepts --param value and --param=value form.' ''
 
-    # msg label:"OPTIONS" -- "DESCRIPTION"
     disp :usage -h --help
+
+    msg -- '' "Examples:
+Install package:
+    ${2##*/} install
+"
+}
+
+parser_definition_list() {
+    setup REST plus:true help:usage abbr:true -- \
+        "Usage: ${2##*/} list [options...]" ''
+
+    msg -- 'List cached packages.'
+
+    disp :usage -h --help
+}
+
+parser_definition_clean() {
+    setup REST plus:true help:usage abbr:true -- \
+        "Usage: ${2##*/} clean [options...]" ''
+
+    msg -- 'Clean the cache directory.'
+
+    flag FORCE -f --force -- "Force clean without confirmation"
+    disp :usage -h --help
+
+    msg -- '' "Examples:
+Clean cache:
+    ${2##*/} clean
+Force clean:
+    ${2##*/} clean -f
+"
 }
 
 if [ $# -gt 0 ]; then
@@ -139,6 +207,14 @@ if [ $# -gt 0 ]; then
         . "${script_dir}/lib/generate.sh"
         fn_generate "$@"
         ;;
+    open)
+        eval "$(getoptions parser_definition_open parse "$0")"
+        parse "$@"
+        eval "set -- $REST"
+        # shellcheck disable=SC1091
+        . "${script_dir}/lib/open.sh"
+        fn_open "$@"
+        ;;
     install)
         eval "$(getoptions parser_definition_install parse "$0")"
         parse "$@"
@@ -147,8 +223,22 @@ if [ $# -gt 0 ]; then
         . "${script_dir}/lib/install.sh"
         fn_install "$@"
         ;;
+    list)
+        eval "$(getoptions parser_definition_list parse "$0")"
+        parse "$@"
+        eval "set -- $REST"
+        # shellcheck disable=SC1091
+        . "${script_dir}/lib/list.sh"
+        fn_list "$@"
+        ;;
+    clean)
+        eval "$(getoptions parser_definition_clean parse "$0")"
+        parse "$@"
+        eval "set -- $REST"
+        # shellcheck disable=SC1091
+        . "${script_dir}/lib/clean.sh"
+        fn_clean "$@"
+        ;;
     --) ;; # no subcommand, arguments only
     esac
 fi
-
-
