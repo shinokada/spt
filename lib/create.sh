@@ -176,6 +176,8 @@ Version: ${REPO_VERSION}
 Architecture: ${ARCHITECTURE}
 Maintainer: ${USER_NAME} <${USER_EMAIL}>
 Depends: 
+Section: utils
+Priority: optional
 Homepage: https://github.com/${REPO_USER}/${REPO_NAME}
 Description: ${REPO_DESC}
 
@@ -185,19 +187,25 @@ EOF
     echo "Creating preinst script ..."
     cat <<EOF >"$PKG_DIR/$DEB_NAME/DEBIAN/preinst"
 #!/bin/bash
-# This removes an old version.
+set -e
 
-echo "Looking for old versions of ${REPO_NAME} ..."
+case "\$1" in
+    install|upgrade)
+        echo "Checking for old versions of ${REPO_NAME} ..."
 
-if [ -f "/usr/bin/${REPO_NAME}" ]; then
-    rm -f "/usr/bin/${REPO_NAME}"
-    echo "Removed old ${REPO_NAME} from /usr/bin"
-fi
+        if [ -f "/usr/bin/${REPO_NAME}" ]; then
+            rm -f "/usr/bin/${REPO_NAME}"
+            echo "Removed old ${REPO_NAME} from /usr/bin"
+        fi
 
-if [ -d "/usr/share/${REPO_NAME}" ]; then
-    rm -rf "/usr/share/${REPO_NAME}"
-    echo "Removed old ${REPO_NAME} from /usr/share"
-fi
+        if [ -d "/usr/share/${REPO_NAME}" ]; then
+            rm -rf "/usr/share/${REPO_NAME}"
+            echo "Removed old ${REPO_NAME} from /usr/share"
+        fi
+        ;;
+esac
+
+exit 0
 EOF
 
     # clone the repo

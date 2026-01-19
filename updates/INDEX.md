@@ -5,7 +5,7 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 ## 📚 Quick Navigation
 
 ### Getting Started
-- **[README.md](README.md)** - Start here! Complete guide with examples
+- **[README.md](../README.md)** - Start here! Complete guide with examples
 - **[INSTALL.md](INSTALL.md)** - Quick installation and testing guide
 - **[CHANGELOG.md](CHANGELOG.md)** - What's new in each version
 
