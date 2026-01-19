@@ -10,15 +10,15 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 - **[CHANGELOG.md](CHANGELOG.md)** - What's new in each version
 
 ### Using SPT
-- **[README.md#quick-start](README.md#quick-start)** - Get started in 3 commands
-- **[README.md#commands](README.md#commands)** - All command documentation
-- **[README.md#workflow](README.md#workflow)** - Step-by-step workflow
-- **[README.md#examples](README.md#examples)** - Usage examples
+- **[README.md#quick-start](../README.md#quick-start)** - Get started in 3 commands
+- **[README.md#commands](../README.md#commands)** - All command documentation
+- **[README.md#workflow](../README.md#workflow)** - Step-by-step workflow
+- **[README.md#examples](../README.md#examples)** - Usage examples
 
 ### Troubleshooting
 - **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - 30+ solutions to common issues
-- **[README.md#troubleshooting](README.md#troubleshooting)** - Quick fixes
-- **[tests/README.md](tests/README.md#troubleshooting)** - Test-specific issues
+- **[README.md#troubleshooting](../README.md#troubleshooting)** - Quick fixes
+- **[tests/README.md](../tests/README.md#troubleshooting)** - Test-specific issues
 
 ### Contributing
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - How to contribute
@@ -31,7 +31,7 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 - **[config.example](config.example)** - Configuration example
 
 ### Development
-- **[tests/README.md](tests/README.md)** - Testing documentation
+- **[tests/README.md](../tests/README.md)** - Testing documentation
 - **[.github/workflows/ci.yml](.github/workflows/ci.yml)** - CI workflow
 - **[.github/workflows/release.yml](.github/workflows/release.yml)** - Release workflow
 
@@ -45,33 +45,33 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 
 ### Installation
 
-| Document                                         | What's Inside                |
-| ------------------------------------------------ | ---------------------------- |
-| [README.md#installation](README.md#installation) | Installing from .deb package |
-| [INSTALL.md](INSTALL.md)                         | Testing without installing   |
-| [README.md#requirements](README.md#requirements) | Dependencies needed          |
+| Document                                            | What's Inside                |
+| --------------------------------------------------- | ---------------------------- |
+| [README.md#installation](../README.md#installation) | Installing from .deb package |
+| [INSTALL.md](INSTALL.md)                            | Testing without installing   |
+| [README.md#requirements](../README.md#requirements) | Dependencies needed          |
 
 ### Commands
 
-| Command    | Documentation                                    |
-| ---------- | ------------------------------------------------ |
-| `create`   | [README.md#spt-create](README.md#spt-create)     |
-| `generate` | [README.md#spt-generate](README.md#spt-generate) |
-| `install`  | [README.md#spt-install](README.md#spt-install)   |
-| `list`     | [README.md#spt-list](README.md#spt-list)         |
-| `clean`    | [README.md#spt-clean](README.md#spt-clean)       |
-| `open`     | [README.md#spt-open](README.md#spt-open)         |
+| Command    | Documentation                                       |
+| ---------- | --------------------------------------------------- |
+| `create`   | [README.md#spt-create](../README.md#spt-create)     |
+| `generate` | [README.md#spt-generate](../README.md#spt-generate) |
+| `install`  | [README.md#spt-install](../README.md#spt-install)   |
+| `list`     | [README.md#spt-list](../README.md#spt-list)         |
+| `clean`    | [README.md#spt-clean](../README.md#spt-clean)       |
+| `open`     | [README.md#spt-open](../README.md#spt-open)         |
 
 ### Features
 
-| Feature                | Documentation                                                                          |
-| ---------------------- | -------------------------------------------------------------------------------------- |
-| Bash Completion        | [README.md#bash-completion](README.md#bash-completion)                                 |
-| Man Pages              | [README.md#man-pages](README.md#man-pages)                                             |
-| Testing                | [README.md#testing](README.md#testing), [tests/README.md](tests/README.md)             |
-| CI/CD                  | [README.md#integration-with-github-actions](README.md#integration-with-github-actions) |
-| Architecture Detection | [README.md#features](README.md#features)                                               |
-| Dry Run                | [README.md#spt-generate](README.md#spt-generate)                                       |
+| Feature                | Documentation                                                                             |
+| ---------------------- | ----------------------------------------------------------------------------------------- |
+| Bash Completion        | [README.md#bash-completion](../README.md#bash-completion)                                 |
+| Man Pages              | [README.md#man-pages](../README.md#man-pages)                                             |
+| Testing                | [README.md#testing](../README.md#testing), [tests/README.md](../tests/README.md)          |
+| CI/CD                  | [README.md#integration-with-github-actions](../README.md#integration-with-github-actions) |
+| Architecture Detection | [README.md#features](../README.md#features)                                               |
+| Dry Run                | [README.md#spt-generate](../README.md#spt-generate)                                       |
 
 ### Troubleshooting
 
@@ -81,17 +81,17 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 | Create Command   | [TROUBLESHOOTING.md#create-command-issues](TROUBLESHOOTING.md#create-command-issues)     |
 | Generate Command | [TROUBLESHOOTING.md#generate-command-issues](TROUBLESHOOTING.md#generate-command-issues) |
 | Install Command  | [TROUBLESHOOTING.md#install-command-issues](TROUBLESHOOTING.md#install-command-issues)   |
-| Testing          | [tests/README.md#troubleshooting](tests/README.md#troubleshooting)                       |
+| Testing          | [tests/README.md#troubleshooting](../tests/README.md#troubleshooting)                    |
 
 ### Development
 
-| Topic           | Documentation                                                                          |
-| --------------- | -------------------------------------------------------------------------------------- |
-| Setting Up      | [CONTRIBUTING.md#development-setup](CONTRIBUTING.md#development-setup)                 |
-| Code Style      | [CONTRIBUTING.md#coding-standards](CONTRIBUTING.md#coding-standards)                   |
-| Testing         | [CONTRIBUTING.md#testing](CONTRIBUTING.md#testing), [tests/README.md](tests/README.md) |
-| Pull Requests   | [CONTRIBUTING.md#submitting-changes](CONTRIBUTING.md#submitting-changes)               |
-| Release Process | [CONTRIBUTING.md#release-process](CONTRIBUTING.md#release-process)                     |
+| Topic           | Documentation                                                                             |
+| --------------- | ----------------------------------------------------------------------------------------- |
+| Setting Up      | [CONTRIBUTING.md#development-setup](CONTRIBUTING.md#development-setup)                    |
+| Code Style      | [CONTRIBUTING.md#coding-standards](CONTRIBUTING.md#coding-standards)                      |
+| Testing         | [CONTRIBUTING.md#testing](CONTRIBUTING.md#testing), [tests/README.md](../tests/README.md) |
+| Pull Requests   | [CONTRIBUTING.md#submitting-changes](CONTRIBUTING.md#submitting-changes)                  |
+| Release Process | [CONTRIBUTING.md#release-process](CONTRIBUTING.md#release-process)                        |
 
 ---
 
@@ -100,13 +100,13 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 ### I want to...
 
 **...create my first package**
-→ [README.md#quick-start](README.md#quick-start)
+→ [README.md#quick-start](../README.md#quick-start)
 
 **...understand how SPT works**
-→ [README.md#overview](README.md#overview)
+→ [README.md#overview](../README.md#overview)
 
 **...see examples of using SPT**
-→ [README.md#examples](README.md#examples)
+→ [README.md#examples](../README.md#examples)
 
 **...fix an error I'm getting**
 → [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
@@ -115,13 +115,13 @@ Welcome to the SPT (Simple Package Tool) documentation. This index will help you
 → [CONTRIBUTING.md](CONTRIBUTING.md)
 
 **...set up bash completion**
-→ [README.md#bash-completion](README.md#bash-completion)
+→ [README.md#bash-completion](../README.md#bash-completion)
 
 **...read the man page**
 → `man ./man/spt.1` or [man/spt.1](man/spt.1)
 
 **...run tests**
-→ [tests/README.md](tests/README.md)
+→ [tests/README.md](../tests/README.md)
 
 **...understand what changed in v0.2.0**
 → [CHANGELOG.md](CHANGELOG.md) and [IMPROVEMENTS.md](IMPROVEMENTS.md)
