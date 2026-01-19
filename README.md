@@ -103,7 +103,13 @@ gh auth login
 Download from [releases](https://github.com/shinokada/spt/releases):
 
 ```bash
-# Download latest (replace X.X.X with version)
+# awesome package manager https://awesome.codewithshin.com/
+awesome install shinokada/spt
+
+# Homebrew
+brew install shinokada/spt/spt
+
+# Debian (replace X.X.X with version)
 curl -LO https://github.com/shinokada/spt/releases/download/vX.X.X/spt_X.X.X-X_all.deb
 
 # Install
